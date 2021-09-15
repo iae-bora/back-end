@@ -8,6 +8,9 @@ namespace IaeBoraLibrary.Model.Context
         public DbSet<User> Users { get; set; }
         public DbSet<Route> Routes { get; set; }
 
+        public DbSet<Place> Place { get; set; }
+        public DbSet<Opening_Hours> Opening_Hours { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Route>().Ignore(r => r.RouteCategories);
@@ -15,7 +18,9 @@ namespace IaeBoraLibrary.Model.Context
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(@"Server=LocalHost\SQLSERVER;Database=iaeboradb;User Id=sa;Password=123456;Trusted_Connection=true;");
+            optionsBuilder.UseSqlServer(@"Server=34.95.239.134;Database=iaebora;User Id=sqlserver;Password=Iaebora123456;");
+
+            //optionsBuilder.UseSqlServer(@"Server=LocalHost\SQLSERVER;Database=iaeboradb;User Id=sa;Password=123456;"); //Trusted_Connection=true;
         }
     }
 }

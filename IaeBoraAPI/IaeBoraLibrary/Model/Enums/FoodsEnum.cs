@@ -2,6 +2,6 @@
 {
     public enum FoodsEnum
     {
-        Churrasco, Caseira, Vegetariana, FastFood, Japonesa, Italiana, Outros
+        Churrasco = 1, Japonesa, Italiana, FastFood, Vegetariana, Outros, Caseira
     }
 }

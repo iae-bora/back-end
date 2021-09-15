@@ -2,6 +2,6 @@
 {
     public enum PlacesEnum
     {
-        Cinema, Restaurante, Parque, Shopping, Show, Museu, Biblioteca, Estadio, Jogos, Teatro, Bar
+        Parque = 1, Museu, Cinema, Shopping, Bar, Restaurante, Show, Biblioteca, Estadio, Jogos, Teatro
     }
 }
