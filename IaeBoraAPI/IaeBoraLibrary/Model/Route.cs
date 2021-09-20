@@ -12,9 +12,10 @@ namespace IaeBoraLibrary.Model
         public int Id { get; set; }
         public DateTime RouteDate { get; set; }
         public User User { get; set; }
-        public List<Enums.PlacesEnum> RouteCategories { get; set; }
+        //public TouristPoint TouristPoint { get; set; }
 
-        // TODO: Adicionar a Lista das RotasDetalhadas (Com o objeto já estruturado).
+        public List<Enums.PlacesEnum> RouteCategories { get; set; }
+        //public List<TouristPoint> RouteDetails { get; set; }
 
         public Route()
         {

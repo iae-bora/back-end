@@ -15,11 +15,9 @@ namespace IaeBoraLibrary.Model
         public Enums.SportsEnum Sports { get; set; }
         public Enums.TeamsEnum Teams { get; set; }
         public Enums.HaveChildrenEnum HaveChildren { get; set; }
-
         public int UserAge { get; set; }
         public int PlacesCount { get; set; }
-        // Idade (Int)
-        // Qtd Destino (Int)
+
         public User User { get; set; }
     }
 }

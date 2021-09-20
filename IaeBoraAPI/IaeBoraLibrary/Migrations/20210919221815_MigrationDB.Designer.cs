@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace IaeBoraLibrary.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20210827002341_MigrationDB")]
+    [Migration("20210919221815_MigrationDB")]
     partial class MigrationDB
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -34,7 +34,13 @@ namespace IaeBoraLibrary.Migrations
                     b.Property<int>("HaveChildren")
                         .HasColumnType("int");
 
+                    b.Property<int>("Movies")
+                        .HasColumnType("int");
+
                     b.Property<int>("Musics")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PlacesCount")
                         .HasColumnType("int");
 
                     b.Property<int>("Religion")
@@ -44,6 +50,9 @@ namespace IaeBoraLibrary.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("Teams")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserAge")
                         .HasColumnType("int");
 
                     b.Property<string>("UserGoogleId")
@@ -76,6 +85,32 @@ namespace IaeBoraLibrary.Migrations
                     b.ToTable("Routes");
                 });
 
+            modelBuilder.Entity("IaeBoraLibrary.Model.TouristPoint", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<TimeSpan>("EndHour")
+                        .HasColumnType("time");
+
+                    b.Property<int>("Index")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("RouteId")
+                        .HasColumnType("int");
+
+                    b.Property<TimeSpan>("StartHour")
+                        .HasColumnType("time");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RouteId");
+
+                    b.ToTable("TouristPoints");
+                });
+
             modelBuilder.Entity("IaeBoraLibrary.Model.User", b =>
                 {
                     b.Property<string>("GoogleId")
@@ -105,6 +140,15 @@ namespace IaeBoraLibrary.Migrations
                         .HasForeignKey("UserGoogleId");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("IaeBoraLibrary.Model.TouristPoint", b =>
+                {
+                    b.HasOne("IaeBoraLibrary.Model.Route", "Route")
+                        .WithMany()
+                        .HasForeignKey("RouteId");
+
+                    b.Navigation("Route");
                 });
 #pragma warning restore 612, 618
         }
