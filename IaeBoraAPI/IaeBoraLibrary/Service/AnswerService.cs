@@ -28,7 +28,6 @@ namespace IaeBoraLibrary.Service
         {
             using (var context = new Context())
             {
-                //context.Entry(yourObject).State = EntityState.Detached
                 context.Entry(answers.User).State = EntityState.Unchanged;
                 context.Answers.Add(answers);
                 context.SaveChanges();
