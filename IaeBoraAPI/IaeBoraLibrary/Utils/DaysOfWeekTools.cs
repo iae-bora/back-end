@@ -6,25 +6,17 @@ namespace IaeBoraLibrary.Utils
     {
         public static DayOfWeek TranslateDay(string day)
         {
-            switch (day)
+            return day switch
             {
-                case "domingo":
-                    return DayOfWeek.Sunday;
-                case "segunda-feira":
-                    return DayOfWeek.Monday;
-                case "terça-feira":
-                    return DayOfWeek.Tuesday;
-                case "quarta-feira":
-                    return DayOfWeek.Wednesday;
-                case "quinta-feira":
-                    return DayOfWeek.Thursday;
-                case "sexta-feira":
-                    return DayOfWeek.Friday;
-                case "sábado":
-                    return DayOfWeek.Saturday;
-                default:
-                    throw new Exception("Esse dia não está cadastrado no sistema. Dia: " + day);
-            }
+                "domingo" => DayOfWeek.Sunday,
+                "segunda-feira" => DayOfWeek.Monday,
+                "terça-feira" => DayOfWeek.Tuesday,
+                "quarta-feira" => DayOfWeek.Wednesday,
+                "quinta-feira" => DayOfWeek.Thursday,
+                "sexta-feira" => DayOfWeek.Friday,
+                "sábado" => DayOfWeek.Saturday,
+                _ => throw new Exception("Esse dia não está cadastrado no sistema. Dia: " + day),
+            };
         }
     }
 }

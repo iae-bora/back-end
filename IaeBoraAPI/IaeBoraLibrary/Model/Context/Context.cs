@@ -18,11 +18,6 @@ namespace IaeBoraLibrary.Model.Context
 
             modelBuilder.Entity<Opening_Hours>().ToTable("opening_hours", o => o.ExcludeFromMigrations());
             modelBuilder.Entity<Place>().ToTable("place", p => p.ExcludeFromMigrations());
-            //modelBuilder.Ignore<Opening_Hours>();
-            //modelBuilder.Ignore<Place>();
-
-            //        modelBuilder.Entity<IdentityUser>()
-            //.ToTable("AspNetUsers", t => t.ExcludeFromMigrations());
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
