@@ -12,6 +12,7 @@ namespace IaeBoraLibrary.Model
         public Place Place { get; set; }
         public Opening_Hours OpeningHours { get; set; }
         public int Index { get; set; }
+        public double DistanceFromOrigin { get; set; }
         public TimeSpan StartHour { get; set; }
         public TimeSpan EndHour { get; set; }
         public Route Route { get; set; }

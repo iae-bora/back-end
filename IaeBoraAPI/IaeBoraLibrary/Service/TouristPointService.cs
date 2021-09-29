@@ -30,9 +30,15 @@ namespace IaeBoraLibrary.Service
             foreach (var placeAndHour in query)
             {
                 auxDistance = GetDistanceFromLatitudeAndLongitude(lat, lon, (double)placeAndHour.Place.Latitude, (double)placeAndHour.Place.Longitude);
+                
+                // TODO: Filtrar por Horas de início e fim
+                
                 if (distance == 0 || auxDistance < distance)
                 {
+                    // TODO: Selecionar os com maior rating?
+
                     distance = auxDistance;
+                    point.DistanceFromOrigin = distance;
                     point.Place = placeAndHour.Place;
                     point.OpeningHours = placeAndHour.Hour;
                 }
