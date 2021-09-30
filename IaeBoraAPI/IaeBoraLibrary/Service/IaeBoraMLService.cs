@@ -11,8 +11,8 @@ namespace IaeBoraLibrary.Service
     public static class IaeBoraMLService
     {
         public static Route GetRouteCategories(Answer userAnswers)
-        {
-            return CreateRouteCategories(SendAnswer(userAnswers), userAnswers.User);
+        { 
+            return CreateRouteCategories(SendAnswer(userAnswers), userAnswers);
         }
 
         private static List<PlacesEnum> SendAnswer(Answer answers)
@@ -28,11 +28,12 @@ namespace IaeBoraLibrary.Service
                 throw new Utils.Exceptions.MLServiceException("Não foi possível obter as Rotas originadas pelo serviço de Machine Learning. ML API: " + response.ErrorMessage);
         }
 
-        private static Route CreateRouteCategories(List<PlacesEnum> placesCategories, User user)
+        private static Route CreateRouteCategories(List<PlacesEnum> placesCategories, Answer answer)
         {
             Route routeCategories = new(placesCategories)
             {
-                User = user,
+                User = answer.User,
+                FoodPreference = answer.Food,
                 RouteDate = DateTime.Now
             };
 

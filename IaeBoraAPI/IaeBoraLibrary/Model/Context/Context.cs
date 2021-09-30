@@ -15,6 +15,7 @@ namespace IaeBoraLibrary.Model.Context
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Route>().Ignore(r => r.RouteCategories);
+            modelBuilder.Entity<Route>().Ignore(r => r.FoodPreference);
 
             //modelBuilder.Entity<Opening_Hours>().ToTable("opening_hours", o => o.ExcludeFromMigrations());
             //modelBuilder.Entity<Place>().ToTable("place", p => p.ExcludeFromMigrations());

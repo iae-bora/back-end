@@ -13,6 +13,7 @@ namespace IaeBoraLibrary.Model
         public DateTime RouteDate { get; set; }
         public User User { get; set; }
         public List<Enums.PlacesEnum> RouteCategories { get; set; }
+        public Enums.FoodsEnum FoodPreference { get; set; }
 
         public Route()
         {

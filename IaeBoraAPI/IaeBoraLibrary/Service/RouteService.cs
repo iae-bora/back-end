@@ -11,10 +11,11 @@ namespace IaeBoraLibrary.Service
         public static List<TouristPoint> CreateDetailedRoute(Answer answer)
         {
             var routeCategories = IaeBoraMLService.GetRouteCategories(answer);
-            return SaveRoutesDetails(routeCategories, answer.User);
+            return CreateAndSaveRoutesDetails(routeCategories);
         }
 
-        public static List<TouristPoint> SaveRoutesDetails(Route route, User user)
+        // TODO: Mudar para private após os testes?
+        public static List<TouristPoint> CreateAndSaveRoutesDetails(Route route)
         {
             List<Place> places;
             List<Opening_Hours> openingHours;
@@ -31,7 +32,8 @@ namespace IaeBoraLibrary.Service
 
                 foreach (var category in route.RouteCategories)
                 {
-                    var newPoint = TouristPointService.GetTouristPoint(category, places, openingHours, user);
+                    var newPoint = TouristPointService.GetTouristPoint(category, places, openingHours, route.FoodPreference);
+
                     newPoint.Index = count;
                     newPoint.Route = route;
 

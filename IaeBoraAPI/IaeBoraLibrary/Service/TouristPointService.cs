@@ -9,13 +9,25 @@ namespace IaeBoraLibrary.Service
 {
     public static class TouristPointService
     {
-        public static TouristPoint GetTouristPoint(PlacesEnum category, List<Place> places, List<Opening_Hours> openingHours, User user)
+        public static TouristPoint GetTouristPoint(PlacesEnum category, List<Place> places, List<Opening_Hours> openingHours, FoodsEnum? foodPreference = null)
         {
             // TODO: Pegar Longitude e Latitude 
             double lat = -23.718412, lon = -46.537121; // Test
 
-            var possiblePlaces = openingHours.Where(oh => Utils.DaysOfWeekTools.TranslateDay(oh.Day_of_Week) == DateTime.Now.DayOfWeek && 
-                                                        oh.Open && oh.Place.Category_id == category).ToList();
+            List<Opening_Hours> possiblePlaces;
+
+            if (category == PlacesEnum.Restaurante)
+            {
+                possiblePlaces = openingHours.Where(oh => Utils.DaysOfWeekTools.TranslateDay(oh.Day_of_Week) == DateTime.Now.DayOfWeek &&
+                                                          oh.Place.Restaurant_category_id == foodPreference &&
+                                                          oh.Place.Category_id == category && 
+                                                          oh.Open).ToList();
+            }
+            else
+            {
+                possiblePlaces = openingHours.Where(oh => Utils.DaysOfWeekTools.TranslateDay(oh.Day_of_Week) == DateTime.Now.DayOfWeek &&
+                                                          oh.Open && oh.Place.Category_id == category).ToList();
+            }
 
             if (possiblePlaces.Count == 0)
                 throw new Utils.Exceptions.NotFoundPlacesException("Não há nenhum ponto turístico disponível com esses parâmetros");
@@ -26,9 +38,9 @@ namespace IaeBoraLibrary.Service
             foreach (var possiblePlace in possiblePlaces)
             {
                 auxDistance = GetDistanceFromLatitudeAndLongitude(lat, lon, (double)possiblePlace.Place.Latitude, (double)possiblePlace.Place.Longitude);
-                
+
                 // TODO: Filtrar por Horas de início e fim
-                
+
                 if (distance == 0 || auxDistance < distance)
                 {
                     // TODO: Selecionar os com maior rating?
