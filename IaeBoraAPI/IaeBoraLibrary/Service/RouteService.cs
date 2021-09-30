@@ -25,6 +25,7 @@ namespace IaeBoraLibrary.Service
             using (var context = new Context())
             {
                 context.Routes.Add(route);
+                context.Entry(route.User).State = EntityState.Unchanged;
                 context.SaveChanges();
 
                 places = context.Place.ToList();

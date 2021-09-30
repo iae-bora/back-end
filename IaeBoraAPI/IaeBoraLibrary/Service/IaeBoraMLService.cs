@@ -5,6 +5,7 @@ using IaeBoraLibrary.Utils;
 using Newtonsoft.Json;
 using RestSharp;
 using System;
+using Newtonsoft.Json.Serialization;
 
 namespace IaeBoraLibrary.Service
 {
@@ -19,7 +20,24 @@ namespace IaeBoraLibrary.Service
         {
             var client = new RestClient(APIRoutesAndKeys.MachineLearningRoute);
             var request = new RestRequest(APIRoutesAndKeys.MachineLearningEndPointRoute, Method.POST);
-            request.AddXmlBody(answers);
+
+            request.AddHeader("Content-Type", "application/json");
+
+            DefaultContractResolver contractResolver = new DefaultContractResolver
+            {
+                NamingStrategy = new CamelCaseNamingStrategy()
+            };
+
+            var json = JsonConvert.SerializeObject(answers, new JsonSerializerSettings
+            {
+                ContractResolver = contractResolver,
+                Formatting = Formatting.Indented
+            });
+
+
+            //var json = JsonConvert.SerializeObject(answers, Formatting.Indented);
+            request.AddParameter("application/json", json, ParameterType.RequestBody);
+
             var response = client.Execute(request);
 
             if (response.IsSuccessful)
