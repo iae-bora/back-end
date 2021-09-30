@@ -19,8 +19,16 @@ namespace IaeBoraAPI.Controllers
         public IActionResult Get()
         {
             Route rota = new Route();
-            rota.RouteCategories.Add(PlacesEnum.Shopping);
-            RouteService.SaveRoutesDetails(rota, null);
+            //rota.RouteCategories.Add(PlacesEnum.Shopping);
+            //rota.RouteCategories.Add(PlacesEnum.Parque);
+            //rota.RouteCategories.Add(PlacesEnum.Cinema);
+            //rota.RouteCategories.Add(PlacesEnum.Teatro);
+
+            rota.RouteCategories.Add(PlacesEnum.Restaurante);
+            rota.RouteCategories.Add(PlacesEnum.Estadio);
+            rota.FoodPreference = FoodsEnum.Japonesa;
+
+            RouteService.CreateAndSaveRoutesDetails(rota);
 
            //// List<IaeBoraLibrary.Model.place> x = new List<IaeBoraLibrary.Model.place>();
            // using (var context = new Context())

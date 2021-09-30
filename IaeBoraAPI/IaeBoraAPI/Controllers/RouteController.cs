@@ -10,7 +10,7 @@ namespace IaeBoraAPI.Controllers
     {
         [HttpGet]
         [Route("")]
-        public IActionResult GetRoute()
+        public IActionResult GetLastRoute()
         {
             throw new System.NotImplementedException("Implementar");
         }

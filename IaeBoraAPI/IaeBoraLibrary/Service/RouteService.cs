@@ -1,6 +1,7 @@
-﻿using IaeBoraLibrary.Model;
+﻿using Microsoft.EntityFrameworkCore;
 using IaeBoraLibrary.Model.Context;
 using System.Collections.Generic;
+using IaeBoraLibrary.Model;
 using System.Linq;
 
 namespace IaeBoraLibrary.Service
@@ -10,13 +11,10 @@ namespace IaeBoraLibrary.Service
         public static List<TouristPoint> CreateDetailedRoute(Answer answer)
         {
             var routeCategories = IaeBoraMLService.GetRouteCategories(answer);
-
-            // Salva a rota no BD e pega o Id criado.
-
-            return SaveRoutesDetails(routeCategories, answer.User);
+            return CreateAndSaveRoutesDetails(routeCategories);
         }
 
-        public static List<TouristPoint> SaveRoutesDetails(Route route, User user)
+        public static List<TouristPoint> CreateAndSaveRoutesDetails(Route route)
         {
             List<Place> places;
             List<Opening_Hours> openingHours;
@@ -25,21 +23,31 @@ namespace IaeBoraLibrary.Service
 
             using (var context = new Context())
             {
+                context.Routes.Add(route);
+                context.Entry(route.User).State = EntityState.Unchanged;
+                context.SaveChanges();
+
                 places = context.Place.ToList();
                 openingHours = context.Opening_Hours.ToList();
+
+                var address = Utils.AddressTools.GetLatitudeAndLongitudeFromAddress(route.User.Address);
+
                 foreach (var category in route.RouteCategories)
                 {
+                    var newPoint = TouristPointService.GetTouristPoint(address, category, places, openingHours, route.FoodPreference);
 
-                    var newPoint = TouristPointService.GetDetailedRoutePlace(category, places, openingHours, user);
                     newPoint.Index = count;
-
-
-                    // todo: add places e oh
                     newPoint.Route = route;
-                    //newPoint.Route.Id = route.Id;
+
+                    context.Entry(newPoint.Place).State = EntityState.Unchanged;
+                    context.Entry(newPoint.OpeningHours).State = EntityState.Unchanged;
 
                     context.TouristPoints.Add(newPoint);
                     touristPoints.Add(newPoint);
+
+                    address.Latitude = (double)newPoint.Place.Latitude;
+                    address.Longitude = (double)newPoint.Place.Longitude;
+
                     count++;
                 }
                 context.SaveChanges();

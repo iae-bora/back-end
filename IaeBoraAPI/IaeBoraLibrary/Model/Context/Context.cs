@@ -15,16 +15,13 @@ namespace IaeBoraLibrary.Model.Context
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Route>().Ignore(r => r.RouteCategories);
-
-            modelBuilder.Entity<Opening_Hours>().ToTable("opening_hours", o => o.ExcludeFromMigrations());
-            modelBuilder.Entity<Place>().ToTable("place", p => p.ExcludeFromMigrations());
+            modelBuilder.Entity<Route>().Ignore(r => r.FoodPreference);
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             //optionsBuilder.UseSqlServer(@"Server=34.95.239.134;Database=iaebora;User Id=sqlserver;Password=Iaebora123456;");
-
-            optionsBuilder.UseSqlServer(@"Server=LocalHost\SQLSERVER;Database=iaebora;User Id=sa;Password=123456;"); //Trusted_Connection=true;
+            optionsBuilder.UseSqlServer(@"Server=LocalHost\SQLSERVER;Database=iaebora;User Id=sa;Password=123456;");
         }
     }
 }

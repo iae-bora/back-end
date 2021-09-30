@@ -9,32 +9,40 @@ namespace IaeBoraLibrary.Service
 {
     public static class TouristPointService
     {
-        public static TouristPoint GetDetailedRoutePlace(PlacesEnum category, List<Place> places, List<Opening_Hours> openingHours, User user)
+        public static TouristPoint GetTouristPoint(Address originAddress, PlacesEnum category, List<Place> places, List<Opening_Hours> openingHours, FoodsEnum? foodPreference = null)
         {
-            // TODO: Pegar Longitude e Latitude 
-            double lat = -23.718412, lon = -46.537121; // Test
+            List<Opening_Hours> possiblePlaces;
 
-            var allowedHours = openingHours.Where(oh => Utils.DaysOfWeekTools.TranslateDay(oh.Day_of_Week) == DateTime.Now.DayOfWeek && oh.Open);
-            var possiblePlaces = places.Where(p => p.Category_id == category);
+            if (category == PlacesEnum.Restaurante)
+            {
+                possiblePlaces = openingHours.Where(oh => Utils.DaysOfWeekTools.TranslateDay(oh.Day_of_Week) == DateTime.Now.DayOfWeek &&
+                                                          oh.Place.Restaurant_category_id == foodPreference &&
+                                                          oh.Place.Category_id == category && 
+                                                          oh.Open).ToList();
+            }
+            else
+            {
+                possiblePlaces = openingHours.Where(oh => Utils.DaysOfWeekTools.TranslateDay(oh.Day_of_Week) == DateTime.Now.DayOfWeek &&
+                                                          oh.Open && oh.Place.Category_id == category).ToList();
+            }
 
-            var query = possiblePlaces
-                .Join(allowedHours,
-                    place => place.Id,
-                    hour => hour.Id,
-                    (place, hour) => new { Place = place, Hour = hour })
-                .Where(placeAndHour => placeAndHour.Place.Id == placeAndHour.Hour.Id).ToList();
+            if (possiblePlaces.Count == 0)
+                throw new Utils.Exceptions.NotFoundPlacesException("Não há nenhum ponto turístico disponível com esses parâmetros");
 
             double distance = 0, auxDistance = 0;
-            TouristPoint point = new TouristPoint();
+            TouristPoint point = new();
 
-            foreach (var placeAndHour in query)
+            foreach (var possiblePlace in possiblePlaces)
             {
-                auxDistance = GetDistanceFromLatitudeAndLongitude(lat, lon, (double)placeAndHour.Place.Latitude, (double)placeAndHour.Place.Longitude);
+                auxDistance = GetDistanceFromLatitudeAndLongitude(originAddress.Latitude, originAddress.Longitude, (double)possiblePlace.Place.Latitude, (double)possiblePlace.Place.Longitude);
+                // TODO: Filtrar por Horas de início e fim
                 if (distance == 0 || auxDistance < distance)
                 {
+                    // TODO: Selecionar os com maior rating?
                     distance = auxDistance;
-                    point.Place = placeAndHour.Place;
-                    point.OpeningHours = placeAndHour.Hour;
+                    point.DistanceFromOrigin = distance;
+                    point.Place = possiblePlace.Place; // Necessidade?
+                    point.OpeningHours = possiblePlace;
                 }
             }
 

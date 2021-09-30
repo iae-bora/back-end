@@ -1,6 +1,6 @@
-﻿using IaeBoraLibrary.Model;
+﻿using IaeBoraLibrary.Utils.Exceptions;
 using IaeBoraLibrary.Model.Context;
-using IaeBoraLibrary.Utils.Exceptions;
+using IaeBoraLibrary.Model;
 using System.Linq;
 
 namespace IaeBoraLibrary.Service
