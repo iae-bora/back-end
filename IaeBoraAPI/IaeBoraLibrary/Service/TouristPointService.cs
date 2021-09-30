@@ -9,27 +9,23 @@ namespace IaeBoraLibrary.Service
 {
     public static class TouristPointService
     {
-        public static TouristPoint GetDetailedRoutePlace(PlacesEnum category, List<Place> places, List<Opening_Hours> openingHours, User user)
+        public static TouristPoint GetTouristPoint(PlacesEnum category, List<Place> places, List<Opening_Hours> openingHours, User user)
         {
             // TODO: Pegar Longitude e Latitude 
             double lat = -23.718412, lon = -46.537121; // Test
 
-            var allowedHours = openingHours.Where(oh => Utils.DaysOfWeekTools.TranslateDay(oh.Day_of_Week) == DateTime.Now.DayOfWeek && oh.Open);
-            var possiblePlaces = places.Where(p => p.Category_id == category);
+            var possiblePlaces = openingHours.Where(oh => Utils.DaysOfWeekTools.TranslateDay(oh.Day_of_Week) == DateTime.Now.DayOfWeek && 
+                                                        oh.Open && oh.Place.Category_id == category).ToList();
 
-            var query = possiblePlaces
-                .Join(allowedHours,
-                    place => place.Id,
-                    hour => hour.Id,
-                    (place, hour) => new { Place = place, Hour = hour })
-                .Where(placeAndHour => placeAndHour.Place.Id == placeAndHour.Hour.Id).ToList();
+            if (possiblePlaces.Count == 0)
+                throw new Utils.Exceptions.NotFoundPlacesException("Não há nenhum ponto turístico disponível com esses parâmetros");
 
             double distance = 0, auxDistance = 0;
             TouristPoint point = new TouristPoint();
 
-            foreach (var placeAndHour in query)
+            foreach (var possiblePlace in possiblePlaces)
             {
-                auxDistance = GetDistanceFromLatitudeAndLongitude(lat, lon, (double)placeAndHour.Place.Latitude, (double)placeAndHour.Place.Longitude);
+                auxDistance = GetDistanceFromLatitudeAndLongitude(lat, lon, (double)possiblePlace.Place.Latitude, (double)possiblePlace.Place.Longitude);
                 
                 // TODO: Filtrar por Horas de início e fim
                 
@@ -39,8 +35,8 @@ namespace IaeBoraLibrary.Service
 
                     distance = auxDistance;
                     point.DistanceFromOrigin = distance;
-                    point.Place = placeAndHour.Place;
-                    point.OpeningHours = placeAndHour.Hour;
+                    point.Place = possiblePlace.Place; // Necessidade?
+                    point.OpeningHours = possiblePlace;
                 }
             }
 

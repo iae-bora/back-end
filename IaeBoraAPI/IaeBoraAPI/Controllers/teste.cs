@@ -20,6 +20,10 @@ namespace IaeBoraAPI.Controllers
         {
             Route rota = new Route();
             rota.RouteCategories.Add(PlacesEnum.Shopping);
+            rota.RouteCategories.Add(PlacesEnum.Parque);
+            rota.RouteCategories.Add(PlacesEnum.Cinema);
+            rota.RouteCategories.Add(PlacesEnum.Teatro);
+
             RouteService.SaveRoutesDetails(rota, null);
 
            //// List<IaeBoraLibrary.Model.place> x = new List<IaeBoraLibrary.Model.place>();

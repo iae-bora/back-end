@@ -1,5 +1,6 @@
 ﻿using IaeBoraLibrary.Model;
 using IaeBoraLibrary.Model.Context;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -10,9 +11,6 @@ namespace IaeBoraLibrary.Service
         public static List<TouristPoint> CreateDetailedRoute(Answer answer)
         {
             var routeCategories = IaeBoraMLService.GetRouteCategories(answer);
-
-            // Salva a rota no BD e pega o Id criado.
-
             return SaveRoutesDetails(routeCategories, answer.User);
         }
 
@@ -25,18 +23,20 @@ namespace IaeBoraLibrary.Service
 
             using (var context = new Context())
             {
+                context.Routes.Add(route);
+                context.SaveChanges();
+
                 places = context.Place.ToList();
                 openingHours = context.Opening_Hours.ToList();
+
                 foreach (var category in route.RouteCategories)
                 {
-
-                    var newPoint = TouristPointService.GetDetailedRoutePlace(category, places, openingHours, user);
+                    var newPoint = TouristPointService.GetTouristPoint(category, places, openingHours, user);
                     newPoint.Index = count;
-
-
-                    // todo: add places e oh
                     newPoint.Route = route;
-                    //newPoint.Route.Id = route.Id;
+
+                    context.Entry(newPoint.Place).State = EntityState.Unchanged;
+                    context.Entry(newPoint.OpeningHours).State = EntityState.Unchanged;
 
                     context.TouristPoints.Add(newPoint);
                     touristPoints.Add(newPoint);

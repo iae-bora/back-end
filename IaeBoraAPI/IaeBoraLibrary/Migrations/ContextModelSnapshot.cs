@@ -63,6 +63,80 @@ namespace IaeBoraLibrary.Migrations
                     b.ToTable("Answers");
                 });
 
+            modelBuilder.Entity("IaeBoraLibrary.Model.Opening_Hours", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Day_of_Week")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<TimeSpan?>("End_Hour")
+                        .HasColumnType("time");
+
+                    b.Property<bool>("Open")
+                        .HasColumnType("bit");
+
+                    b.Property<int?>("PlaceId")
+                        .HasColumnType("int");
+
+                    b.Property<TimeSpan?>("Start_Hour")
+                        .HasColumnType("time");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PlaceId");
+
+                    b.ToTable("Opening_Hours");
+                });
+
+            modelBuilder.Entity("IaeBoraLibrary.Model.Place", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Business_status")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Category_id")
+                        .HasColumnType("int");
+
+                    b.Property<int>("City_id")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Image")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double?>("Latitude")
+                        .HasColumnType("float");
+
+                    b.Property<double?>("Longitude")
+                        .HasColumnType("float");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Phone")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double?>("Rating")
+                        .HasColumnType("float");
+
+                    b.Property<int?>("Restaurant_category_id")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Place");
+                });
+
             modelBuilder.Entity("IaeBoraLibrary.Model.Route", b =>
                 {
                     b.Property<int>("Id")
@@ -90,10 +164,19 @@ namespace IaeBoraLibrary.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<double>("DistanceFromOrigin")
+                        .HasColumnType("float");
+
                     b.Property<TimeSpan>("EndHour")
                         .HasColumnType("time");
 
                     b.Property<int>("Index")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("OpeningHoursId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("PlaceId")
                         .HasColumnType("int");
 
                     b.Property<int?>("RouteId")
@@ -103,6 +186,10 @@ namespace IaeBoraLibrary.Migrations
                         .HasColumnType("time");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("OpeningHoursId");
+
+                    b.HasIndex("PlaceId");
 
                     b.HasIndex("RouteId");
 
@@ -131,6 +218,15 @@ namespace IaeBoraLibrary.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("IaeBoraLibrary.Model.Opening_Hours", b =>
+                {
+                    b.HasOne("IaeBoraLibrary.Model.Place", "Place")
+                        .WithMany()
+                        .HasForeignKey("PlaceId");
+
+                    b.Navigation("Place");
+                });
+
             modelBuilder.Entity("IaeBoraLibrary.Model.Route", b =>
                 {
                     b.HasOne("IaeBoraLibrary.Model.User", "User")
@@ -142,9 +238,21 @@ namespace IaeBoraLibrary.Migrations
 
             modelBuilder.Entity("IaeBoraLibrary.Model.TouristPoint", b =>
                 {
+                    b.HasOne("IaeBoraLibrary.Model.Opening_Hours", "OpeningHours")
+                        .WithMany()
+                        .HasForeignKey("OpeningHoursId");
+
+                    b.HasOne("IaeBoraLibrary.Model.Place", "Place")
+                        .WithMany()
+                        .HasForeignKey("PlaceId");
+
                     b.HasOne("IaeBoraLibrary.Model.Route", "Route")
                         .WithMany()
                         .HasForeignKey("RouteId");
+
+                    b.Navigation("OpeningHours");
+
+                    b.Navigation("Place");
 
                     b.Navigation("Route");
                 });

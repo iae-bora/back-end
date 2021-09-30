@@ -8,6 +8,29 @@ namespace IaeBoraLibrary.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "Place",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Image = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Business_status = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Phone = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Latitude = table.Column<double>(type: "float", nullable: true),
+                    Longitude = table.Column<double>(type: "float", nullable: true),
+                    Rating = table.Column<double>(type: "float", nullable: true),
+                    City_id = table.Column<int>(type: "int", nullable: false),
+                    Category_id = table.Column<int>(type: "int", nullable: false),
+                    Restaurant_category_id = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Place", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
                 {
@@ -17,6 +40,29 @@ namespace IaeBoraLibrary.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Users", x => x.GoogleId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Opening_Hours",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Day_of_Week = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Open = table.Column<bool>(type: "bit", nullable: false),
+                    Start_Hour = table.Column<TimeSpan>(type: "time", nullable: true),
+                    End_Hour = table.Column<TimeSpan>(type: "time", nullable: true),
+                    PlaceId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Opening_Hours", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Opening_Hours_Place_PlaceId",
+                        column: x => x.PlaceId,
+                        principalTable: "Place",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -73,7 +119,10 @@ namespace IaeBoraLibrary.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    PlaceId = table.Column<int>(type: "int", nullable: true),
+                    OpeningHoursId = table.Column<int>(type: "int", nullable: true),
                     Index = table.Column<int>(type: "int", nullable: false),
+                    DistanceFromOrigin = table.Column<double>(type: "float", nullable: false),
                     StartHour = table.Column<TimeSpan>(type: "time", nullable: false),
                     EndHour = table.Column<TimeSpan>(type: "time", nullable: false),
                     RouteId = table.Column<int>(type: "int", nullable: true)
@@ -81,6 +130,18 @@ namespace IaeBoraLibrary.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_TouristPoints", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_TouristPoints_Opening_Hours_OpeningHoursId",
+                        column: x => x.OpeningHoursId,
+                        principalTable: "Opening_Hours",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_TouristPoints_Place_PlaceId",
+                        column: x => x.PlaceId,
+                        principalTable: "Place",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_TouristPoints_Routes_RouteId",
                         column: x => x.RouteId,
@@ -95,9 +156,24 @@ namespace IaeBoraLibrary.Migrations
                 column: "UserGoogleId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Opening_Hours_PlaceId",
+                table: "Opening_Hours",
+                column: "PlaceId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Routes_UserGoogleId",
                 table: "Routes",
                 column: "UserGoogleId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TouristPoints_OpeningHoursId",
+                table: "TouristPoints",
+                column: "OpeningHoursId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TouristPoints_PlaceId",
+                table: "TouristPoints",
+                column: "PlaceId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_TouristPoints_RouteId",
@@ -114,7 +190,13 @@ namespace IaeBoraLibrary.Migrations
                 name: "TouristPoints");
 
             migrationBuilder.DropTable(
+                name: "Opening_Hours");
+
+            migrationBuilder.DropTable(
                 name: "Routes");
+
+            migrationBuilder.DropTable(
+                name: "Place");
 
             migrationBuilder.DropTable(
                 name: "Users");

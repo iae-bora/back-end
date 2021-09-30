@@ -1,16 +1,18 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace IaeBoraLibrary.Model
 {
     public class Opening_Hours
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         public string Day_of_Week { get; set; }
         public bool Open { get; set; }
         public TimeSpan? Start_Hour { get; set; }
         public TimeSpan? End_Hour { get; set; }
-        public int Place_Id { get; set; }
+        public Place Place { get; set; }
     }
 }
