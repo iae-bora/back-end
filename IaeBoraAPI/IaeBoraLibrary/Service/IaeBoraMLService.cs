@@ -17,8 +17,8 @@ namespace IaeBoraLibrary.Service
 
         private static List<PlacesEnum> SendAnswer(Answer answers)
         {
-            var client = new RestClient(APIRoutes.MachineLearningURL);
-            var request = new RestRequest(APIRoutes.MachineLearningCreateRouteEndPoint, Method.POST);
+            var client = new RestClient(APIRoutesAndKeys.MachineLearningRoute);
+            var request = new RestRequest(APIRoutesAndKeys.MachineLearningEndPointRoute, Method.POST);
             request.AddXmlBody(answers);
             var response = client.Execute(request);
 

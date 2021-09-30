@@ -30,9 +30,11 @@ namespace IaeBoraLibrary.Service
                 places = context.Place.ToList();
                 openingHours = context.Opening_Hours.ToList();
 
+                var address = Utils.AddressTools.GetLatitudeAndLongitudeFromAddress(route.User.Address);
+
                 foreach (var category in route.RouteCategories)
                 {
-                    var newPoint = TouristPointService.GetTouristPoint(category, places, openingHours, route.FoodPreference);
+                    var newPoint = TouristPointService.GetTouristPoint(address, category, places, openingHours, route.FoodPreference);
 
                     newPoint.Index = count;
                     newPoint.Route = route;
@@ -42,6 +44,10 @@ namespace IaeBoraLibrary.Service
 
                     context.TouristPoints.Add(newPoint);
                     touristPoints.Add(newPoint);
+
+                    address.Latitude = (double)newPoint.Place.Latitude;
+                    address.Longitude = (double)newPoint.Place.Longitude;
+
                     count++;
                 }
                 context.SaveChanges();

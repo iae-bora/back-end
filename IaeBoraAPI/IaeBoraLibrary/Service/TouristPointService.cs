@@ -9,11 +9,8 @@ namespace IaeBoraLibrary.Service
 {
     public static class TouristPointService
     {
-        public static TouristPoint GetTouristPoint(PlacesEnum category, List<Place> places, List<Opening_Hours> openingHours, FoodsEnum? foodPreference = null)
+        public static TouristPoint GetTouristPoint(Address originAddress, PlacesEnum category, List<Place> places, List<Opening_Hours> openingHours, FoodsEnum? foodPreference = null)
         {
-            // TODO: Pegar Longitude e Latitude 
-            double lat = -23.718412, lon = -46.537121; // Test
-
             List<Opening_Hours> possiblePlaces;
 
             if (category == PlacesEnum.Restaurante)
@@ -37,7 +34,7 @@ namespace IaeBoraLibrary.Service
 
             foreach (var possiblePlace in possiblePlaces)
             {
-                auxDistance = GetDistanceFromLatitudeAndLongitude(lat, lon, (double)possiblePlace.Place.Latitude, (double)possiblePlace.Place.Longitude);
+                auxDistance = GetDistanceFromLatitudeAndLongitude(originAddress.Latitude, originAddress.Longitude, (double)possiblePlace.Place.Latitude, (double)possiblePlace.Place.Longitude);
 
                 // TODO: Filtrar por Horas de início e fim
 
