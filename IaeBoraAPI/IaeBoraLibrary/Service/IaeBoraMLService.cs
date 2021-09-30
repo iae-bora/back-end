@@ -1,11 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using Newtonsoft.Json.Serialization;
+using System.Collections.Generic;
 using IaeBoraLibrary.Model.Enums;
 using IaeBoraLibrary.Model;
 using IaeBoraLibrary.Utils;
 using Newtonsoft.Json;
 using RestSharp;
 using System;
-using Newtonsoft.Json.Serialization;
 
 namespace IaeBoraLibrary.Service
 {
@@ -22,20 +22,15 @@ namespace IaeBoraLibrary.Service
             var request = new RestRequest(APIRoutesAndKeys.MachineLearningEndPointRoute, Method.POST);
 
             request.AddHeader("Content-Type", "application/json");
-
             DefaultContractResolver contractResolver = new DefaultContractResolver
             {
                 NamingStrategy = new CamelCaseNamingStrategy()
             };
-
             var json = JsonConvert.SerializeObject(answers, new JsonSerializerSettings
             {
                 ContractResolver = contractResolver,
                 Formatting = Formatting.Indented
             });
-
-
-            //var json = JsonConvert.SerializeObject(answers, Formatting.Indented);
             request.AddParameter("application/json", json, ParameterType.RequestBody);
 
             var response = client.Execute(request);

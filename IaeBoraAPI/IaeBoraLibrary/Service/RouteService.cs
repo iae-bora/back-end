@@ -1,7 +1,7 @@
-﻿using IaeBoraLibrary.Model;
+﻿using Microsoft.EntityFrameworkCore;
 using IaeBoraLibrary.Model.Context;
-using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using IaeBoraLibrary.Model;
 using System.Linq;
 
 namespace IaeBoraLibrary.Service
@@ -14,7 +14,6 @@ namespace IaeBoraLibrary.Service
             return CreateAndSaveRoutesDetails(routeCategories);
         }
 
-        // TODO: Mudar para private após os testes?
         public static List<TouristPoint> CreateAndSaveRoutesDetails(Route route)
         {
             List<Place> places;

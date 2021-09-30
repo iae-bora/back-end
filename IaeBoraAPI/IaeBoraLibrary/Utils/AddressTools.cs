@@ -23,7 +23,7 @@ namespace IaeBoraLibrary.Utils
 
             if (response.IsSuccessful)
             {
-                Address addressToReturn = new Address();
+                Address addressToReturn = new();
 
                 var json = JToken.Parse(response.Content);
 
@@ -34,8 +34,7 @@ namespace IaeBoraLibrary.Utils
             }
             else
             {
-                // TODO: Arrumar
-                throw new System.Exception("a");
+                throw new Exceptions.AddressServiceException("Erro ao obter Latitude e Longitude do endereço do usuário. Endereço: " + CEP);
             }
         }
     }

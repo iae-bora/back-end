@@ -30,18 +30,15 @@ namespace IaeBoraLibrary.Service
                 throw new Utils.Exceptions.NotFoundPlacesException("Não há nenhum ponto turístico disponível com esses parâmetros");
 
             double distance = 0, auxDistance = 0;
-            TouristPoint point = new TouristPoint();
+            TouristPoint point = new();
 
             foreach (var possiblePlace in possiblePlaces)
             {
                 auxDistance = GetDistanceFromLatitudeAndLongitude(originAddress.Latitude, originAddress.Longitude, (double)possiblePlace.Place.Latitude, (double)possiblePlace.Place.Longitude);
-
                 // TODO: Filtrar por Horas de início e fim
-
                 if (distance == 0 || auxDistance < distance)
                 {
                     // TODO: Selecionar os com maior rating?
-
                     distance = auxDistance;
                     point.DistanceFromOrigin = distance;
                     point.Place = possiblePlace.Place; // Necessidade?
