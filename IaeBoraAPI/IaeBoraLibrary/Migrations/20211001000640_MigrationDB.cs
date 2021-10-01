@@ -50,8 +50,8 @@ namespace IaeBoraLibrary.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Day_of_Week = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Open = table.Column<bool>(type: "bit", nullable: false),
-                    Start_Hour = table.Column<TimeSpan>(type: "time", nullable: true),
-                    End_Hour = table.Column<TimeSpan>(type: "time", nullable: true),
+                    Start_Hour = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    End_Hour = table.Column<DateTime>(type: "datetime2", nullable: true),
                     PlaceId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -119,12 +119,11 @@ namespace IaeBoraLibrary.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    PlaceId = table.Column<int>(type: "int", nullable: true),
                     OpeningHoursId = table.Column<int>(type: "int", nullable: true),
                     Index = table.Column<int>(type: "int", nullable: false),
                     DistanceFromOrigin = table.Column<double>(type: "float", nullable: false),
-                    StartHour = table.Column<TimeSpan>(type: "time", nullable: false),
-                    EndHour = table.Column<TimeSpan>(type: "time", nullable: false),
+                    StartHour = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EndHour = table.Column<DateTime>(type: "datetime2", nullable: false),
                     RouteId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -134,12 +133,6 @@ namespace IaeBoraLibrary.Migrations
                         name: "FK_TouristPoints_Opening_Hours_OpeningHoursId",
                         column: x => x.OpeningHoursId,
                         principalTable: "Opening_Hours",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_TouristPoints_Place_PlaceId",
-                        column: x => x.PlaceId,
-                        principalTable: "Place",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
@@ -169,11 +162,6 @@ namespace IaeBoraLibrary.Migrations
                 name: "IX_TouristPoints_OpeningHoursId",
                 table: "TouristPoints",
                 column: "OpeningHoursId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_TouristPoints_PlaceId",
-                table: "TouristPoints",
-                column: "PlaceId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_TouristPoints_RouteId",

@@ -23,14 +23,16 @@ namespace IaeBoraLibrary.Service
             else
             {
                 possiblePlaces = openingHours.Where(oh => Utils.DaysOfWeekTools.TranslateDay(oh.Day_of_Week) == DateTime.Now.DayOfWeek &&
-                                                          oh.Open && oh.Place.Category_id == category).ToList();
+                                                          oh.Place.Category_id == category &&
+                                                          oh.Open).ToList();
             }
 
             if (possiblePlaces.Count == 0)
-                throw new Utils.Exceptions.NotFoundPlacesException("Não há nenhum ponto turístico disponível com esses parâmetros");
+                return null;
+                //throw new Utils.Exceptions.NotFoundPlacesException("Não há nenhum ponto turístico disponível com esses parâmetros");
 
             double distance = 0, auxDistance = 0;
-            TouristPoint point = new();
+            TouristPoint point = new ();
 
             foreach (var possiblePlace in possiblePlaces)
             {
@@ -38,10 +40,8 @@ namespace IaeBoraLibrary.Service
                 // TODO: Filtrar por Horas de início e fim
                 if (distance == 0 || auxDistance < distance)
                 {
-                    // TODO: Selecionar os com maior rating?
                     distance = auxDistance;
                     point.DistanceFromOrigin = distance;
-                    point.Place = possiblePlace.Place; // Necessidade?
                     point.OpeningHours = possiblePlace;
                 }
             }

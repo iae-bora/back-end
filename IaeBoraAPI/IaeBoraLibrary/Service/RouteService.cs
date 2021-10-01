@@ -11,14 +11,14 @@ namespace IaeBoraLibrary.Service
         public static List<TouristPoint> CreateDetailedRoute(Answer answer)
         {
             var routeCategories = IaeBoraMLService.GetRouteCategories(answer);
-            return CreateAndSaveRoutesDetails(routeCategories);
+            return CreateAndSaveRoutesDetails(routeCategories, answer);
         }
 
-        public static List<TouristPoint> CreateAndSaveRoutesDetails(Route route)
+        public static List<TouristPoint> CreateAndSaveRoutesDetails(Route route, Answer answer)
         {
             List<Place> places;
             List<Opening_Hours> openingHours;
-            List<TouristPoint> touristPoints = new List<TouristPoint>();
+            List<TouristPoint> touristPoints = new();
             int count = 0;
 
             using (var context = new Context())
@@ -35,20 +35,23 @@ namespace IaeBoraLibrary.Service
                 foreach (var category in route.RouteCategories)
                 {
                     var newPoint = TouristPointService.GetTouristPoint(address, category, places, openingHours, route.FoodPreference);
+                    if (newPoint != null)
+                    {
+                        newPoint.Index = count;
+                        newPoint.Route = route;
 
-                    newPoint.Index = count;
-                    newPoint.Route = route;
+                        context.Entry(newPoint.OpeningHours).State = EntityState.Unchanged;
 
-                    context.Entry(newPoint.Place).State = EntityState.Unchanged;
-                    context.Entry(newPoint.OpeningHours).State = EntityState.Unchanged;
+                        context.TouristPoints.Add(newPoint);
+                        touristPoints.Add(newPoint);
 
-                    context.TouristPoints.Add(newPoint);
-                    touristPoints.Add(newPoint);
+                        address.Latitude = (double)newPoint.OpeningHours.Place.Latitude;
+                        address.Longitude = (double)newPoint.OpeningHours.Place.Longitude;
 
-                    address.Latitude = (double)newPoint.Place.Latitude;
-                    address.Longitude = (double)newPoint.Place.Longitude;
-
-                    count++;
+                        count++;
+                        if (count == answer.PlacesCount)
+                            break;
+                    }
                 }
                 context.SaveChanges();
             }

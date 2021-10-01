@@ -26,11 +26,15 @@ namespace IaeBoraLibrary.Service
             {
                 NamingStrategy = new CamelCaseNamingStrategy()
             };
+
+            answers.PlacesCount += 2; // Margem de segurança, caso alguma categoria não tenha estabelecimento aberto.
             var json = JsonConvert.SerializeObject(answers, new JsonSerializerSettings
             {
                 ContractResolver = contractResolver,
                 Formatting = Formatting.Indented
             });
+            answers.PlacesCount -= 2;
+
             request.AddParameter("application/json", json, ParameterType.RequestBody);
 
             var response = client.Execute(request);
