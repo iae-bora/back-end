@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace IaeBoraLibrary.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20210930023528_MigrationDB")]
+    [Migration("20211001000640_MigrationDB")]
     partial class MigrationDB
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -75,8 +75,8 @@ namespace IaeBoraLibrary.Migrations
                     b.Property<string>("Day_of_Week")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<TimeSpan?>("End_Hour")
-                        .HasColumnType("time");
+                    b.Property<DateTime?>("End_Hour")
+                        .HasColumnType("datetime2");
 
                     b.Property<bool>("Open")
                         .HasColumnType("bit");
@@ -84,8 +84,8 @@ namespace IaeBoraLibrary.Migrations
                     b.Property<int?>("PlaceId")
                         .HasColumnType("int");
 
-                    b.Property<TimeSpan?>("Start_Hour")
-                        .HasColumnType("time");
+                    b.Property<DateTime?>("Start_Hour")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
@@ -169,8 +169,8 @@ namespace IaeBoraLibrary.Migrations
                     b.Property<double>("DistanceFromOrigin")
                         .HasColumnType("float");
 
-                    b.Property<TimeSpan>("EndHour")
-                        .HasColumnType("time");
+                    b.Property<DateTime>("EndHour")
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("Index")
                         .HasColumnType("int");
@@ -178,20 +178,15 @@ namespace IaeBoraLibrary.Migrations
                     b.Property<int?>("OpeningHoursId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("PlaceId")
-                        .HasColumnType("int");
-
                     b.Property<int?>("RouteId")
                         .HasColumnType("int");
 
-                    b.Property<TimeSpan>("StartHour")
-                        .HasColumnType("time");
+                    b.Property<DateTime>("StartHour")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
                     b.HasIndex("OpeningHoursId");
-
-                    b.HasIndex("PlaceId");
 
                     b.HasIndex("RouteId");
 
@@ -244,17 +239,11 @@ namespace IaeBoraLibrary.Migrations
                         .WithMany()
                         .HasForeignKey("OpeningHoursId");
 
-                    b.HasOne("IaeBoraLibrary.Model.Place", "Place")
-                        .WithMany()
-                        .HasForeignKey("PlaceId");
-
                     b.HasOne("IaeBoraLibrary.Model.Route", "Route")
                         .WithMany()
                         .HasForeignKey("RouteId");
 
                     b.Navigation("OpeningHours");
-
-                    b.Navigation("Place");
 
                     b.Navigation("Route");
                 });

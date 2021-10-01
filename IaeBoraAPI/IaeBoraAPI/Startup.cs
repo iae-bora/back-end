@@ -1,3 +1,4 @@
+using IaeBoraAPI.Middlewares;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -21,16 +22,16 @@ namespace IaeBoraAPI
             services.AddCors(options =>
             {
                 options.AddPolicy("CorsPolicy",
-                builder => builder
-                .AllowAnyOrigin()
-                .AllowAnyMethod()
-                .AllowAnyHeader());
+                builder => builder.AllowAnyOrigin()
+                                  .AllowAnyMethod()
+                                  .AllowAnyHeader());
             });
             services.AddControllers();
+
             services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "IaeBoraAPI", Version = "v1" });
-            });
+                {
+                    c.SwaggerDoc("v1", new OpenApiInfo { Title = "IaeBoraAPI", Version = "v1" });
+                });
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -49,6 +50,8 @@ namespace IaeBoraAPI
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.UseMiddleware(typeof(ErrorHandlerMiddleware));
 
             app.UseEndpoints(endpoints =>
             {
