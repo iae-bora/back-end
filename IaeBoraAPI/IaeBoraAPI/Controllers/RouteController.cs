@@ -28,12 +28,5 @@ namespace IaeBoraAPI.Controllers
         {
             return Ok(RouteService.CreateDetailedRoute(answer));
         }
-
-        [HttpPut]
-        [Route("")]
-        public IActionResult UpdateRoute()
-        {
-            throw new System.NotImplementedException("Implementar");
-        }
     }
 }

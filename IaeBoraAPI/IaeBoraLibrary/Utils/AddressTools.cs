@@ -9,9 +9,9 @@ namespace IaeBoraLibrary.Utils
 {
     public class AddressTools
     {
-        public static Address GetLatitudeAndLongitudeFromAddress(string CEP)
+        public static Address GetLatitudeAndLongitudeFromAddress(string postalCode)
         {
-            var address = new ViaCepClient().Search(CEP);
+            var address = new ViaCepClient().Search(postalCode);
             var addressQuery = $"{address.Street} {address.Neighborhood} {address.Complement} {address.City} {address.StateInitials} {address.ZipCode}";
 
             var client = new RestClient(APIRoutesAndKeys.GeoCordinateAPIRoute);
@@ -39,7 +39,7 @@ namespace IaeBoraLibrary.Utils
             }
             else
             {
-                throw new Exceptions.AddressServiceException("Erro ao obter Latitude e Longitude do endereço do usuário. Endereço: " + CEP);
+                throw new Exceptions.AddressServiceException("Erro ao obter Latitude e Longitude do endereço do usuário. Endereço: " + postalCode);
             }
         }
 
@@ -50,6 +50,12 @@ namespace IaeBoraLibrary.Utils
             double distance = location1.GetDistanceTo(location2);
 
             return distance;
+        }
+
+        public static bool PostalCodeValidator(string postalCode)
+        {
+            var address = new ViaCepClient().Search(postalCode);
+            return (address.ZipCode == null) ? false : true;
         }
     }
 }
