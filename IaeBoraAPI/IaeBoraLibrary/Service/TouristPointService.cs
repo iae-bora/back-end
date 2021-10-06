@@ -1,6 +1,5 @@
 ﻿using IaeBoraLibrary.Model.Enums;
 using System.Collections.Generic;
-using GeoCoordinatePortable;
 using IaeBoraLibrary.Model;
 using System.Linq;
 using System;
@@ -9,53 +8,47 @@ namespace IaeBoraLibrary.Service
 {
     public static class TouristPointService
     {
-        public static TouristPoint GetTouristPoint(Address originAddress, PlacesEnum category, List<Place> places, List<Opening_Hours> openingHours, FoodsEnum? foodPreference = null)
+        public static TouristPoint GetTouristPoint(Address originAddress, PlacesEnum category, List<Opening_Hours> openingHours, Answer answer)
         {
-            List<Opening_Hours> possiblePlaces;
+            List<Opening_Hours>  possiblePlaces = GetOpeningPlaces(openingHours, answer.RouteDateAndTime, answer.RouteDateAndTime.AddHours(2)).
+                Where(p => p.Place.Category_id == category).ToList();
 
             if (category == PlacesEnum.Restaurante)
-            {
-                possiblePlaces = openingHours.Where(oh => Utils.DaysOfWeekTools.TranslateDay(oh.Day_of_Week) == DateTime.Now.DayOfWeek &&
-                                                          oh.Place.Restaurant_category_id == foodPreference &&
-                                                          oh.Place.Category_id == category && 
-                                                          oh.Open).ToList();
-            }
-            else
-            {
-                possiblePlaces = openingHours.Where(oh => Utils.DaysOfWeekTools.TranslateDay(oh.Day_of_Week) == DateTime.Now.DayOfWeek &&
-                                                          oh.Place.Category_id == category &&
-                                                          oh.Open).ToList();
-            }
+                possiblePlaces = possiblePlaces.Where(p => p.Place.Restaurant_category_id == answer.Food).ToList();      
 
             if (possiblePlaces.Count == 0)
-                return null;
-                //throw new Utils.Exceptions.NotFoundPlacesException("Não há nenhum ponto turístico disponível com esses parâmetros");
+                return null; // TODO: Add: Exceptions.NotFoundPlacesException. ?
 
             double distance = 0, auxDistance = 0;
-            TouristPoint point = new ();
+            TouristPoint point = new();
 
             foreach (var possiblePlace in possiblePlaces)
             {
-                auxDistance = GetDistanceFromLatitudeAndLongitude(originAddress.Latitude, originAddress.Longitude, (double)possiblePlace.Place.Latitude, (double)possiblePlace.Place.Longitude);
-                // TODO: Filtrar por Horas de início e fim
+                auxDistance = Utils.AddressTools.GetDistanceFromLatitudeAndLongitude(originAddress.Latitude, 
+                                                                                     originAddress.Longitude, 
+                                                                                     (double)possiblePlace.Place.Latitude, 
+                                                                                     (double)possiblePlace.Place.Longitude);
                 if (distance == 0 || auxDistance < distance)
                 {
                     distance = auxDistance;
                     point.DistanceFromOrigin = distance;
                     point.OpeningHours = possiblePlace;
+                    point.StartHour = answer.RouteDateAndTime;
+                    point.EndHour = answer.RouteDateAndTime.AddHours(2);
                 }
             }
 
             return point;
         }
 
-        private static double GetDistanceFromLatitudeAndLongitude(double lat1, double long1, double lat2, double long2)
+        public static List<Opening_Hours> GetOpeningPlaces(List<Opening_Hours> openingHours, DateTime startHour, DateTime endHour)
         {
-            var location1 = new GeoCoordinate(lat1, long1);
-            var location2 = new GeoCoordinate(lat2, long2);
-            double distance = location1.GetDistanceTo(location2);
+            var possiblePlaces = openingHours.Where(oh => oh.Open &&
+                Utils.DaysOfWeekTools.TranslateDay(oh.Day_of_Week) == startHour.DayOfWeek &&
+                oh.Start_Hour?.Hour <= startHour.Hour && 
+                oh.End_Hour?.Hour >= endHour.Hour).ToList();
 
-            return distance;
+            return possiblePlaces;
         }
     }
 }

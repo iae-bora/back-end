@@ -15,7 +15,6 @@ namespace IaeBoraLibrary.Model.Context
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Route>().Ignore(r => r.RouteCategories);
-            modelBuilder.Entity<Route>().Ignore(r => r.FoodPreference);
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace IaeBoraLibrary.Model
@@ -17,6 +18,7 @@ namespace IaeBoraLibrary.Model
         public Enums.HaveChildrenEnum HaveChildren { get; set; }
         public int UserAge { get; set; }
         public int PlacesCount { get; set; }
+        public DateTime RouteDateAndTime { get; set; }
 
         public User User { get; set; }
     }

@@ -1,6 +1,8 @@
-﻿using System;
+﻿
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace IaeBoraLibrary.Model
 {
@@ -14,6 +16,7 @@ namespace IaeBoraLibrary.Model
         public double DistanceFromOrigin { get; set; }
         public DateTime StartHour { get; set; }
         public DateTime EndHour { get; set; }
+        [JsonIgnore(Condition = JsonIgnoreCondition.Always)]
         public Route Route { get; set; }
     }
 }
