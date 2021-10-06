@@ -16,7 +16,6 @@ namespace IaeBoraLibrary.Service
 
         public static List<TouristPoint> CreateAndSaveRoutesDetails(Route route, Answer answer)
         {
-            List<Place> places;
             List<Opening_Hours> openingHours;
             List<TouristPoint> touristPoints = new();
             int count = 0;
@@ -27,16 +26,17 @@ namespace IaeBoraLibrary.Service
                 context.Entry(route.User).State = EntityState.Unchanged;
                 context.SaveChanges();
 
-                places = context.Place.ToList();
-                openingHours = context.Opening_Hours.ToList();
+                openingHours = context.Opening_Hours.Include("Place").ToList();
 
                 var address = Utils.AddressTools.GetLatitudeAndLongitudeFromAddress(route.User.Address);
 
                 foreach (var category in route.RouteCategories)
                 {
-                    var newPoint = TouristPointService.GetTouristPoint(address, category, places, openingHours, route.FoodPreference);
+                    var newPoint = TouristPointService.GetTouristPoint(address, category, openingHours, answer);
                     if (newPoint != null)
                     {
+                        answer.RouteDateAndTime = newPoint.EndHour;
+
                         newPoint.Index = count;
                         newPoint.Route = route;
 
@@ -49,8 +49,8 @@ namespace IaeBoraLibrary.Service
                         address.Longitude = (double)newPoint.OpeningHours.Place.Longitude;
 
                         count++;
-                        if (count == answer.PlacesCount)
-                            break;
+                        if (count == answer.PlacesCount) 
+                            break; //TODO: Remover futuramente com a nova task.
                     }
                 }
                 context.SaveChanges();

@@ -1,4 +1,5 @@
-﻿using IaeBoraLibrary.Model;
+﻿using GeoCoordinatePortable;
+using IaeBoraLibrary.Model;
 using Newtonsoft.Json.Linq;
 using RestSharp;
 using ViaCep;
@@ -36,6 +37,15 @@ namespace IaeBoraLibrary.Utils
             {
                 throw new Exceptions.AddressServiceException("Erro ao obter Latitude e Longitude do endereço do usuário. Endereço: " + CEP);
             }
+        }
+
+        public static double GetDistanceFromLatitudeAndLongitude(double lat1, double long1, double lat2, double long2)
+        {
+            var location1 = new GeoCoordinate(lat1, long1);
+            var location2 = new GeoCoordinate(lat2, long2);
+            double distance = location1.GetDistanceTo(location2);
+
+            return distance;
         }
     }
 }
