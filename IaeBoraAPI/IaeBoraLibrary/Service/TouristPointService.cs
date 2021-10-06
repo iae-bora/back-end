@@ -8,13 +8,13 @@ namespace IaeBoraLibrary.Service
 {
     public static class TouristPointService
     {
-        public static TouristPoint GetTouristPoint(Address originAddress, PlacesEnum category, List<Opening_Hours> openingHours, Answer answer)
+        public static TouristPoint GetTouristPoint(Address originAddress, PlacesEnum category, List<OpeningHours> openingHours, Answer answer)
         {
-            List<Opening_Hours>  possiblePlaces = GetOpeningPlaces(openingHours, answer.RouteDateAndTime, answer.RouteDateAndTime.AddHours(2)).
-                Where(p => p.Place.Category_id == category).ToList();
+            List<OpeningHours>  possiblePlaces = GetOpeningPlaces(openingHours, answer.RouteDateAndTime, answer.RouteDateAndTime.AddHours(2)).
+                Where(p => p.Place.Category == category).ToList();
 
             if (category == PlacesEnum.Restaurante)
-                possiblePlaces = possiblePlaces.Where(p => p.Place.Restaurant_category_id == answer.Food).ToList();      
+                possiblePlaces = possiblePlaces.Where(p => p.Place.RestaurantCategory == answer.Food).ToList();      
 
             if (possiblePlaces.Count == 0)
                 return null; // TODO: Add: Exceptions.NotFoundPlacesException. ?
@@ -41,12 +41,12 @@ namespace IaeBoraLibrary.Service
             return point;
         }
 
-        public static List<Opening_Hours> GetOpeningPlaces(List<Opening_Hours> openingHours, DateTime startHour, DateTime endHour)
+        public static List<OpeningHours> GetOpeningPlaces(List<OpeningHours> openingHours, DateTime startHour, DateTime endHour)
         {
             var possiblePlaces = openingHours.Where(oh => oh.Open &&
-                Utils.DaysOfWeekTools.TranslateDay(oh.Day_of_Week) == startHour.DayOfWeek &&
-                oh.Start_Hour?.Hour <= startHour.Hour && 
-                oh.End_Hour?.Hour >= endHour.Hour).ToList();
+                Utils.DaysOfWeekTools.TranslateDay(oh.DayOfWeek) == startHour.DayOfWeek &&
+                oh.StartHour?.Hour <= startHour.Hour && 
+                oh.EndHour?.Hour >= endHour.Hour).ToList();
 
             return possiblePlaces;
         }

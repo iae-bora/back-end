@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace IaeBoraLibrary.Migrations
 {
-    public partial class MigrationDB : Migration
+    public partial class MigrationDB_V0 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -15,15 +15,15 @@ namespace IaeBoraLibrary.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Image = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Business_status = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    BusinessStatus = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Phone = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Latitude = table.Column<double>(type: "float", nullable: true),
                     Longitude = table.Column<double>(type: "float", nullable: true),
                     Rating = table.Column<double>(type: "float", nullable: true),
-                    City_id = table.Column<int>(type: "int", nullable: false),
-                    Category_id = table.Column<int>(type: "int", nullable: false),
-                    Restaurant_category_id = table.Column<int>(type: "int", nullable: true)
+                    City = table.Column<int>(type: "int", nullable: false),
+                    Category = table.Column<int>(type: "int", nullable: false),
+                    RestaurantCategory = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -43,22 +43,22 @@ namespace IaeBoraLibrary.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Opening_Hours",
+                name: "OpeningHours",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Day_of_Week = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DayOfWeek = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Open = table.Column<bool>(type: "bit", nullable: false),
-                    Start_Hour = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    End_Hour = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    StartHour = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    EndHour = table.Column<DateTime>(type: "datetime2", nullable: true),
                     PlaceId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Opening_Hours", x => x.Id);
+                    table.PrimaryKey("PK_OpeningHours", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Opening_Hours_Place_PlaceId",
+                        name: "FK_OpeningHours_Place_PlaceId",
                         column: x => x.PlaceId,
                         principalTable: "Place",
                         principalColumn: "Id",
@@ -80,6 +80,7 @@ namespace IaeBoraLibrary.Migrations
                     HaveChildren = table.Column<int>(type: "int", nullable: false),
                     UserAge = table.Column<int>(type: "int", nullable: false),
                     PlacesCount = table.Column<int>(type: "int", nullable: false),
+                    RouteDateAndTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UserGoogleId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
@@ -130,9 +131,9 @@ namespace IaeBoraLibrary.Migrations
                 {
                     table.PrimaryKey("PK_TouristPoints", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_TouristPoints_Opening_Hours_OpeningHoursId",
+                        name: "FK_TouristPoints_OpeningHours_OpeningHoursId",
                         column: x => x.OpeningHoursId,
-                        principalTable: "Opening_Hours",
+                        principalTable: "OpeningHours",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
@@ -149,8 +150,8 @@ namespace IaeBoraLibrary.Migrations
                 column: "UserGoogleId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Opening_Hours_PlaceId",
-                table: "Opening_Hours",
+                name: "IX_OpeningHours_PlaceId",
+                table: "OpeningHours",
                 column: "PlaceId");
 
             migrationBuilder.CreateIndex(
@@ -178,7 +179,7 @@ namespace IaeBoraLibrary.Migrations
                 name: "TouristPoints");
 
             migrationBuilder.DropTable(
-                name: "Opening_Hours");
+                name: "OpeningHours");
 
             migrationBuilder.DropTable(
                 name: "Routes");

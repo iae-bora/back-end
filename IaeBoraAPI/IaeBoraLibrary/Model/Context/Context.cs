@@ -10,7 +10,7 @@ namespace IaeBoraLibrary.Model.Context
         public DbSet<TouristPoint> TouristPoints { get; set; }
 
         public DbSet<Place> Place { get; set; }
-        public DbSet<Opening_Hours> Opening_Hours { get; set; }
+        public DbSet<OpeningHours> OpeningHours { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -20,7 +20,7 @@ namespace IaeBoraLibrary.Model.Context
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             //optionsBuilder.UseSqlServer(@"Server=34.95.239.134;Database=iaebora;User Id=sqlserver;Password=Iaebora123456;");
-            optionsBuilder.UseSqlServer(@"Server=LocalHost\SQLSERVER;Database=iaebora;User Id=sa;Password=123456;");
+            optionsBuilder.UseSqlServer(@"Server=LocalHost\SQLSERVER;Database=iaeboradevelop;User Id=sa;Password=123456;");
         }
     }
 }
