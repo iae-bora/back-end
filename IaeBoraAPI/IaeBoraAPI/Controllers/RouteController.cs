@@ -16,10 +16,10 @@ namespace IaeBoraAPI.Controllers
         }
 
         [HttpGet]
-        [Route("all")]
-        public IActionResult GetAllRoutes()
+        [Route("all/{userId}")]
+        public IActionResult GetAllRoutes(string userId)
         {
-            throw new System.NotImplementedException("Implementar");
+            return Ok(RouteService.GetAllRoutes(userId));
         }
 
         [HttpPost]
