@@ -22,6 +22,14 @@ namespace IaeBoraAPI.Controllers
             UserService.CreateUser(user);
             return Ok();
         }
+
+        [HttpPut]
+        [Route("")]
+        public IActionResult UpdateUser([FromBody] User user)
+        {
+            UserService.UpdateUser(user);
+            return Ok();
+        }
     }
 }
  

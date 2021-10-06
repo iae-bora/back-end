@@ -50,8 +50,7 @@ namespace IaeBoraLibrary.Service
             Route routeCategories = new(placesCategories)
             {
                 User = answer.User,
-                FoodPreference = answer.Food,
-                RouteDate = DateTime.Now
+                RouteDate = answer.RouteDateAndTime
             };
 
             return routeCategories;
