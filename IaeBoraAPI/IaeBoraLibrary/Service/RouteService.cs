@@ -4,41 +4,49 @@ using System.Collections.Generic;
 using IaeBoraLibrary.Model;
 using System.Linq;
 using RestSharp;
+using System.Text.Json;
 
 namespace IaeBoraLibrary.Service
 {
     public static class RouteService
     {
-        public static List<Route> GetAllRoutes(string userId)
+        public static string GetAllRoutesJsonFormat(string userId)
         {
+            List<TouristPoint> points;
+            List<Route> routes;
+
             using (var context = new Context())
             {
-                var routes = context.Routes.Where(r => r.User.GoogleId == userId).OrderByDescending(r => r.RouteDate).ToList();
-                if (routes == null)
-                    throw new Utils.Exceptions.NullPlacesFoundException("Esse usuário não possui nenhuma rota cadastrada.");
-
-
-                // ================     Bagulho Feio    =====================
-                dynamic route = new JsonObject();
-                route.name = "Rota de Teste";
-
-                dynamic points = new JsonArray();
-
-                dynamic point1 = new JsonObject();
-                point1.name = "Teste 1";
-
-                dynamic point2 = new JsonObject();
-                point2.name = "Teste 2";
-
-                points.Add(point1);
-                points.Add(point2);
-
-                route.points = points;
-                // ==========================================================
-
-
-                return routes;
+                points = context.TouristPoints.Include("OpeningHours").Include("OpeningHours.Place").Include("Route").ToList();
+                routes = context.Routes.Where(r => r.User.GoogleId == userId).OrderByDescending(r => r.RouteDate).ToList();
             }
+
+            if (routes.Count == 0)
+                throw new Utils.Exceptions.NullPlacesFoundException("Esse usuário não possui nenhuma rota cadastrada.");
+
+            return GetFormattedRouteJson(routes, points);
+        }
+
+        public static string GetFormattedRouteJson(List<Route> routes, List<TouristPoint> allTouristPoints)
+        {
+            dynamic routesJson = new JsonArray();
+            foreach (var route in routes)
+            {
+                dynamic routeJson = new JsonObject();
+
+                routeJson.id = route.Id;
+                routeJson.routeDate = route.RouteDate;
+
+                dynamic pointsJson = new JsonArray();
+
+                foreach (var touristPoint in allTouristPoints.Where(p => p.Route.Id == route.Id))
+                    pointsJson.Add(touristPoint);
+
+                routeJson.touristPoints = pointsJson;
+                routesJson.Add(routeJson);
+            }
+
+            return JsonSerializer.Serialize(routesJson, new JsonSerializerOptions { WriteIndented = true });
         }
 
         public static List<TouristPoint> CreateDetailedRoute(Answer answer)

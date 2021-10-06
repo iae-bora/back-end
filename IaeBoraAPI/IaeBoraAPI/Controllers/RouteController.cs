@@ -19,7 +19,7 @@ namespace IaeBoraAPI.Controllers
         [Route("all/{userId}")]
         public IActionResult GetAllRoutes(string userId)
         {
-            return Ok(RouteService.GetAllRoutes(userId));
+            return Ok(RouteService.GetAllRoutesJsonFormat(userId));
         }
 
         [HttpPost]
