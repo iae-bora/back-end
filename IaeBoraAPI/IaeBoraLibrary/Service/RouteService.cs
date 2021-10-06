@@ -2,9 +2,11 @@
 using IaeBoraLibrary.Model.Context;
 using System.Collections.Generic;
 using IaeBoraLibrary.Model;
+using System.Text.Json;
 using System.Linq;
 using RestSharp;
-using System.Text.Json;
+using System.Text.Encodings.Web;
+using System.Text.Unicode;
 
 namespace IaeBoraLibrary.Service
 {
@@ -17,7 +19,7 @@ namespace IaeBoraLibrary.Service
 
             using (var context = new Context())
             {
-                points = context.TouristPoints.Include("OpeningHours").Include("OpeningHours.Place").Include("Route").ToList();
+                points = context.TouristPoints.Include("OpeningHours").Include("OpeningHours.Place").Include("Route").Where(p => p.Route.User.GoogleId == userId).ToList();
                 routes = context.Routes.Where(r => r.User.GoogleId == userId).OrderByDescending(r => r.RouteDate).ToList();
             }
 
@@ -46,7 +48,7 @@ namespace IaeBoraLibrary.Service
                 routesJson.Add(routeJson);
             }
 
-            return JsonSerializer.Serialize(routesJson, new JsonSerializerOptions { WriteIndented = true });
+            return JsonSerializer.Serialize(routesJson, new JsonSerializerOptions { WriteIndented = true, Encoder = JavaScriptEncoder.Create(UnicodeRanges.All) });
         }
 
         public static List<TouristPoint> CreateDetailedRoute(Answer answer)
