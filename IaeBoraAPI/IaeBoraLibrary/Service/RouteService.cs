@@ -12,7 +12,19 @@ namespace IaeBoraLibrary.Service
 {
     public static class RouteService
     {
-        public static string GetAllRoutesJsonFormat(string userId)
+        public static string GetLastRouteJson(string userId)
+        {
+            var routeAndPoint = GetAllRoutes(userId);
+            return GetFormattedRouteJson(new List<Route> { routeAndPoint.Item2.OrderByDescending(r => r.RouteDate).First() }, routeAndPoint.Item1);
+        }
+
+        public static string GetAllRoutesJson(string userId)
+        {
+            var routeAndPoint = GetAllRoutes(userId);
+            return GetFormattedRouteJson(routeAndPoint.Item2, routeAndPoint.Item1);
+        }
+
+        public static (List<TouristPoint>, List<Route>) GetAllRoutes(string userId)
         {
             List<TouristPoint> points;
             List<Route> routes;
@@ -26,7 +38,7 @@ namespace IaeBoraLibrary.Service
             if (routes.Count == 0)
                 throw new Utils.Exceptions.NullPlacesFoundException("Esse usuário não possui nenhuma rota cadastrada.");
 
-            return GetFormattedRouteJson(routes, points);
+            return (points, routes);
         }
 
         public static string GetFormattedRouteJson(List<Route> routes, List<TouristPoint> allTouristPoints)

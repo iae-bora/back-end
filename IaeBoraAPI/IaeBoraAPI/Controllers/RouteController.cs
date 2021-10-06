@@ -9,17 +9,17 @@ namespace IaeBoraAPI.Controllers
     public class RouteController : Controller
     {
         [HttpGet]
-        [Route("")]
-        public IActionResult GetLastRoute()
+        [Route("{userId}")]
+        public IActionResult GetLastRoute(string userId)
         {
-            throw new System.NotImplementedException("Implementar");
+            return Ok(RouteService.GetLastRouteJson(userId));
         }
 
         [HttpGet]
         [Route("all/{userId}")]
         public IActionResult GetAllRoutes(string userId)
         {
-            return Ok(RouteService.GetAllRoutesJsonFormat(userId));
+            return Ok(RouteService.GetAllRoutesJson(userId));
         }
 
         [HttpPost]
