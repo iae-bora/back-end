@@ -2,6 +2,7 @@
 using IaeBoraLibrary.Model;
 using Newtonsoft.Json.Linq;
 using RestSharp;
+using System.Linq;
 using ViaCep;
 
 namespace IaeBoraLibrary.Utils
@@ -27,6 +28,9 @@ namespace IaeBoraLibrary.Utils
                 Address addressToReturn = new();
 
                 var json = JToken.Parse(response.Content);
+
+                if (!json["data"][0].Any())
+                    throw new Exceptions.AddressServiceException("Não foi possível obter o endereço do usuário.");
 
                 addressToReturn.Latitude = (double)json["data"][0]["latitude"];
                 addressToReturn.Longitude = (double)json["data"][0]["longitude"];

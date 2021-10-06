@@ -63,13 +63,13 @@ namespace IaeBoraLibrary.Service
             return JsonSerializer.Serialize(routesJson, new JsonSerializerOptions { WriteIndented = true, Encoder = JavaScriptEncoder.Create(UnicodeRanges.All) });
         }
 
-        public static List<TouristPoint> CreateDetailedRoute(Answer answer)
+        public static string CreateDetailedRoute(Answer answer)
         {
             var routeCategories = IaeBoraMLService.GetRouteCategories(answer);
-            return CreateAndSaveRoutesDetails(routeCategories, answer);
+            return GetFormattedRouteJson(new List<Route> { routeCategories }, CreateAndSaveDetailedRoute(routeCategories, answer));
         }
 
-        public static List<TouristPoint> CreateAndSaveRoutesDetails(Route route, Answer answer)
+        public static List<TouristPoint> CreateAndSaveDetailedRoute(Route route, Answer answer)
         {
             List<Opening_Hours> openingHours;
             List<TouristPoint> touristPoints = new();
