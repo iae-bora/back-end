@@ -33,7 +33,7 @@ namespace IaeBoraLibrary.Service
                 NamingStrategy = new CamelCaseNamingStrategy()
             };
 
-            var json = JsonConvert.SerializeObject(answer, new JsonSerializerSettings
+            var json = JsonConvert.SerializeObject(newAnswer, new JsonSerializerSettings
             {
                 ContractResolver = contractResolver,
                 Formatting = Formatting.Indented
