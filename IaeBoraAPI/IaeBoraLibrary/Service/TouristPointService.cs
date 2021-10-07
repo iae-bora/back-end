@@ -14,14 +14,13 @@ namespace IaeBoraLibrary.Service
                 Where(p => p.Place.Category == category).ToList();
 
             if (category == PlacesEnum.Restaurante)
-                possiblePlaces = possiblePlaces.Where(p => p.Place.RestaurantCategory == answer.Food).ToList();      
+                possiblePlaces = possiblePlaces.Where(p => p.Place.RestaurantCategory == answer.Food).ToList();
 
             if (possiblePlaces.Count == 0)
-                return null; // TODO: Add: Exceptions.NotFoundPlacesException. ?
+                throw new Utils.Exceptions.NotFoundPlacesException("Nenhum local foi encontrado com esse paramêtros.");
 
             double distance = 0, auxDistance = 0;
             TouristPoint point = new();
-
             foreach (var possiblePlace in possiblePlaces)
             {
                 auxDistance = Utils.AddressTools.GetDistanceFromLatitudeAndLongitude(originAddress.Latitude, 

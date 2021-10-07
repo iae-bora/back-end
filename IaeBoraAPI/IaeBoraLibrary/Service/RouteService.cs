@@ -27,13 +27,11 @@ namespace IaeBoraLibrary.Service
         {
             List<TouristPoint> points;
             List<Route> routes;
-
             using (var context = new Context())
             {
                 points = context.TouristPoints.Include("OpeningHours").Include("OpeningHours.Place").Include("Route").Where(p => p.Route.User.GoogleId == userId).ToList();
                 routes = context.Routes.Where(r => r.User.GoogleId == userId).OrderByDescending(r => r.RouteDate).ToList();
             }
-
             if (routes.Count == 0)
                 throw new Utils.Exceptions.NullPlacesFoundException("Esse usuário não possui nenhuma rota cadastrada.");
 
@@ -58,12 +56,10 @@ namespace IaeBoraLibrary.Service
                 routeJson.touristPoints = pointsJson;
                 routesJson.Add(routeJson);
             }
-
             var contractResolver = new DefaultContractResolver
             {
                 NamingStrategy = new CamelCaseNamingStrategy()
             };
-
             var json = JsonConvert.SerializeObject(routesJson, new JsonSerializerSettings
             {
                 Formatting = Formatting.Indented,
@@ -84,7 +80,6 @@ namespace IaeBoraLibrary.Service
             List<OpeningHours> openingHours;
             List<TouristPoint> touristPoints = new();
             int count = 0;
-
             using (var context = new Context())
             {
                 context.Routes.Add(route);
@@ -92,21 +87,17 @@ namespace IaeBoraLibrary.Service
                 context.SaveChanges();
 
                 openingHours = context.OpeningHours.Include("Place").ToList();
-
                 var address = Utils.AddressTools.GetLatitudeAndLongitudeFromAddress(route.User.Address);
-
                 foreach (var category in route.RouteCategories)
                 {
                     var newPoint = TouristPointService.GetTouristPoint(address, category, openingHours, answer);
                     if (newPoint != null)
                     {
                         answer.RouteDateAndTime = newPoint.EndHour;
-
                         newPoint.Index = count;
                         newPoint.Route = route;
 
                         context.Entry(newPoint.OpeningHours).State = EntityState.Unchanged;
-
                         context.TouristPoints.Add(newPoint);
                         touristPoints.Add(newPoint);
 
@@ -114,8 +105,6 @@ namespace IaeBoraLibrary.Service
                         address.Longitude = (double)newPoint.OpeningHours.Place.Longitude;
 
                         count++;
-                        if (count == answer.PlacesCount) 
-                            break; //TODO: Remover futuramente com a nova task.
                     }
                 }
                 context.SaveChanges();

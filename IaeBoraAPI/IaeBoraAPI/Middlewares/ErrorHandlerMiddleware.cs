@@ -9,10 +9,12 @@ namespace IaeBoraAPI.Middlewares
     public class ErrorHandlerMiddleware
     {
         private readonly RequestDelegate _next;
+
         public ErrorHandlerMiddleware(RequestDelegate next)
         {
             _next = next;
         }
+
         public async Task Invoke(HttpContext context)
         {
             try
@@ -28,7 +30,6 @@ namespace IaeBoraAPI.Middlewares
         private Task HandleExceptionAsync(HttpContext context, Exception exception)
         {
             var resultjson = JsonConvert.SerializeObject(new { message = exception.Message });
-
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
             

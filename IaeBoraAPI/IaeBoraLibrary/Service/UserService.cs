@@ -15,6 +15,7 @@ namespace IaeBoraLibrary.Service
                 var userRegistered = context.Users.Where(u => u.GoogleId == userId).FirstOrDefault();
                 if (userRegistered == null)
                     throw new UserServiceException("Usuário não cadastrado.");
+
                 return userRegistered;
             }
         }
