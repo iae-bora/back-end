@@ -8,8 +8,8 @@ namespace IaeBoraLibrary.Model.Context
         public DbSet<User> Users { get; set; }
         public DbSet<Route> Routes { get; set; }
         public DbSet<TouristPoint> TouristPoints { get; set; }
-
-        public DbSet<Place> Place { get; set; }
+        public DbSet<FeedBack> FeedBacks { get; set; }
+        public DbSet<Place> Places { get; set; }
         public DbSet<OpeningHours> OpeningHours { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
