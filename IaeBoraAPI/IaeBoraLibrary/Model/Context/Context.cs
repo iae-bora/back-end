@@ -10,7 +10,7 @@ namespace IaeBoraLibrary.Model.Context
         public DbSet<TouristPoint> TouristPoints { get; set; }
 
         public DbSet<Place> Place { get; set; }
-        public DbSet<Opening_Hours> Opening_Hours { get; set; }
+        public DbSet<OpeningHours> OpeningHours { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

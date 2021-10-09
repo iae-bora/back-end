@@ -1,12 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json.Serialization;
 using IaeBoraLibrary.Model.Context;
 using System.Collections.Generic;
 using IaeBoraLibrary.Model;
-using System.Text.Json;
+using Newtonsoft.Json;
 using System.Linq;
 using RestSharp;
-using System.Text.Encodings.Web;
-using System.Text.Unicode;
 
 namespace IaeBoraLibrary.Service
 {
@@ -60,7 +59,18 @@ namespace IaeBoraLibrary.Service
                 routesJson.Add(routeJson);
             }
 
-            return JsonSerializer.Serialize(routesJson, new JsonSerializerOptions { WriteIndented = true, Encoder = JavaScriptEncoder.Create(UnicodeRanges.All) });
+            var contractResolver = new DefaultContractResolver
+            {
+                NamingStrategy = new CamelCaseNamingStrategy()
+            };
+
+            var json = JsonConvert.SerializeObject(routesJson, new JsonSerializerSettings
+            {
+                Formatting = Formatting.Indented,
+                ContractResolver = contractResolver,
+            });
+
+            return json;
         }
 
         public static string CreateDetailedRoute(Answer answer)
@@ -71,7 +81,7 @@ namespace IaeBoraLibrary.Service
 
         public static List<TouristPoint> CreateAndSaveDetailedRoute(Route route, Answer answer)
         {
-            List<Opening_Hours> openingHours;
+            List<OpeningHours> openingHours;
             List<TouristPoint> touristPoints = new();
             int count = 0;
 
@@ -81,7 +91,7 @@ namespace IaeBoraLibrary.Service
                 context.Entry(route.User).State = EntityState.Unchanged;
                 context.SaveChanges();
 
-                openingHours = context.Opening_Hours.Include("Place").ToList();
+                openingHours = context.OpeningHours.Include("Place").ToList();
 
                 var address = Utils.AddressTools.GetLatitudeAndLongitudeFromAddress(route.User.Address);
 
