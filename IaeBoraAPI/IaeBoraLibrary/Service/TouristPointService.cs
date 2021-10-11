@@ -20,13 +20,8 @@ namespace IaeBoraLibrary.Service
                 throw new Utils.Exceptions.NotFoundPlacesException("Nenhum local foi encontrado com esse paramêtros.");
 
             List<TouristPoint> historyPlaces = answer.TakeNewPlaces ? RouteService.GetAllRoutes(answer.User.GoogleId).Item1 : null;
-
             var point = PickTheTouristPoint(originAddress, answer, possiblePlaces, historyPlaces);
-
-            if (point.OpeningHours == null) {
-                var random = new Random();
-                point = PickTheTouristPoint(originAddress, answer, possiblePlaces.OrderBy(p => random.Next()).ToList(), null);
-            }
+            point = point.OpeningHours == null ? PickTheTouristPoint(originAddress, answer, possiblePlaces) : point;
 
             return point;
         }
