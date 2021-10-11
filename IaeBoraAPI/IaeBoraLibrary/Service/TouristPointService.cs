@@ -1,5 +1,6 @@
 ﻿using IaeBoraLibrary.Model.Enums;
 using System.Collections.Generic;
+using IaeBoraLibrary.Utils.Tools;
 using IaeBoraLibrary.Model;
 using System.Linq;
 using System;
@@ -14,17 +15,16 @@ namespace IaeBoraLibrary.Service
                 Where(p => p.Place.Category == category).ToList();
 
             if (category == PlacesEnum.Restaurante)
-                possiblePlaces = possiblePlaces.Where(p => p.Place.RestaurantCategory == answer.Food).ToList();      
+                possiblePlaces = possiblePlaces.Where(p => p.Place.RestaurantCategory == answer.Food).ToList();
 
             if (possiblePlaces.Count == 0)
-                return null; // TODO: Add: Exceptions.NotFoundPlacesException. ?
+                throw new Utils.Exceptions.NotFoundPlacesException("Nenhum local foi encontrado com esse paramêtros.");
 
             double distance = 0, auxDistance = 0;
             TouristPoint point = new();
-
             foreach (var possiblePlace in possiblePlaces)
             {
-                auxDistance = Utils.AddressTools.GetDistanceFromLatitudeAndLongitude(originAddress.Latitude, 
+                auxDistance = AddressTools.GetDistanceFromLatitudeAndLongitude(originAddress.Latitude, 
                                                                                      originAddress.Longitude, 
                                                                                      (double)possiblePlace.Place.Latitude, 
                                                                                      (double)possiblePlace.Place.Longitude);
@@ -44,7 +44,7 @@ namespace IaeBoraLibrary.Service
         public static List<OpeningHours> GetOpeningPlaces(List<OpeningHours> openingHours, DateTime startHour, DateTime endHour)
         {
             var possiblePlaces = openingHours.Where(oh => oh.Open &&
-                Utils.DaysOfWeekTools.TranslateDay(oh.DayOfWeek) == startHour.DayOfWeek &&
+                DaysOfWeekTools.TranslateDay(oh.DayOfWeek) == startHour.DayOfWeek &&
                 oh.StartHour?.Hour <= startHour.Hour && 
                 oh.EndHour?.Hour >= endHour.Hour).ToList();
 

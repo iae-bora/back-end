@@ -19,7 +19,6 @@ namespace IaeBoraLibrary.Model
         public int UserAge { get; set; }
         public int PlacesCount { get; set; }
         public DateTime RouteDateAndTime { get; set; }
-
         public User User { get; set; }
     }
 }

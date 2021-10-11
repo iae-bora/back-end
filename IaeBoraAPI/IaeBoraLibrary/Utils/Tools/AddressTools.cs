@@ -5,7 +5,7 @@ using RestSharp;
 using System.Linq;
 using ViaCep;
 
-namespace IaeBoraLibrary.Utils
+namespace IaeBoraLibrary.Utils.Tools
 {
     public class AddressTools
     {
