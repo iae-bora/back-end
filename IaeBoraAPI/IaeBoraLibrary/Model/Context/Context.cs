@@ -20,7 +20,11 @@ namespace IaeBoraLibrary.Model.Context
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(@"Server=LocalHost\SQLSERVER;Database=iaeboradevelop;User Id=sa;Password=123456;");
+#if DEBUG
+            optionsBuilder.UseSqlServer(@"Server=LocalHost\SQLSERVER;Database=iaebora;User Id=sa;Password=123456;");
+#else
+            optionsBuilder.UseSqlServer(@"Server=34.85.205.224;Database=iaebora;User Id=sqlserver;Password=Iae Bora 123456;");
+#endif
         }
     }
 }
