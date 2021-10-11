@@ -12,29 +12,48 @@ namespace IaeBoraLibrary.Service
         public static TouristPoint GetTouristPoint(Address originAddress, PlacesEnum category, List<OpeningHours> openingHours, Answer answer)
         {
             List<OpeningHours>  possiblePlaces = GetOpeningPlaces(openingHours, answer.RouteDateAndTime, answer.RouteDateAndTime.AddHours(2)).
-                Where(p => p.Place.Category == category).ToList();
-
+                                                                  Where(p => p.Place.Category == category).ToList();
             if (category == PlacesEnum.Restaurante)
                 possiblePlaces = possiblePlaces.Where(p => p.Place.RestaurantCategory == answer.Food).ToList();
 
             if (possiblePlaces.Count == 0)
                 throw new Utils.Exceptions.NotFoundPlacesException("Nenhum local foi encontrado com esse paramêtros.");
 
+            List<TouristPoint> historyPlaces = answer.TakeNewPlaces ? RouteService.GetAllRoutes(answer.User.GoogleId).Item1 : null;
+
+            var point = PickTheTouristPoint(originAddress, answer, possiblePlaces, historyPlaces);
+
+            if (point.OpeningHours == null) {
+                var random = new Random();
+                point = PickTheTouristPoint(originAddress, answer, possiblePlaces.OrderBy(p => random.Next()).ToList(), null);
+            }
+
+            return point;
+        }
+
+        private static TouristPoint PickTheTouristPoint(Address originAddress, 
+                                                        Answer answer, 
+                                                        List<OpeningHours> possiblePlaces, 
+                                                        List<TouristPoint> historyPlaces = null)
+        {
             double distance = 0, auxDistance = 0;
             TouristPoint point = new();
             foreach (var possiblePlace in possiblePlaces)
             {
-                auxDistance = AddressTools.GetDistanceFromLatitudeAndLongitude(originAddress.Latitude, 
-                                                                                     originAddress.Longitude, 
-                                                                                     (double)possiblePlace.Place.Latitude, 
-                                                                                     (double)possiblePlace.Place.Longitude);
-                if (distance == 0 || auxDistance < distance)
+                if (historyPlaces == null || (historyPlaces != null && !historyPlaces.Any(p => p.OpeningHours.Place.Id == possiblePlace.Place.Id)))
                 {
-                    distance = auxDistance;
-                    point.DistanceFromOrigin = distance;
-                    point.OpeningHours = possiblePlace;
-                    point.StartHour = answer.RouteDateAndTime;
-                    point.EndHour = answer.RouteDateAndTime.AddHours(2);
+                    auxDistance = AddressTools.GetDistanceFromLatitudeAndLongitude(originAddress.Latitude,
+                                                                                   originAddress.Longitude,
+                                                                                   (double)possiblePlace.Place.Latitude,
+                                                                                   (double)possiblePlace.Place.Longitude);
+                    if (distance == 0 || auxDistance < distance)
+                    {
+                        distance = auxDistance;
+                        point.DistanceFromOrigin = distance;
+                        point.OpeningHours = possiblePlace;
+                        point.StartHour = answer.RouteDateAndTime;
+                        point.EndHour = answer.RouteDateAndTime.AddHours(2);
+                    }
                 }
             }
 

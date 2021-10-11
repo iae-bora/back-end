@@ -18,6 +18,8 @@ namespace IaeBoraLibrary.Model
         public Enums.HaveChildrenEnum HaveChildren { get; set; }
         public int UserAge { get; set; }
         public int PlacesCount { get; set; }
+        [NotMapped]
+        public bool TakeNewPlaces { get; set; }
         public DateTime RouteDateAndTime { get; set; }
         public User User { get; set; }
     }
