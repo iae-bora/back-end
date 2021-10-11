@@ -1,8 +1,6 @@
-﻿using System;
-
-namespace IaeBoraLibrary.Utils.Exceptions
+﻿namespace IaeBoraLibrary.Utils.Exceptions
 {
-    public class NullPlacesFoundException : Exception
+    public class NullPlacesFoundException : ExceptionBase
     {
         public NullPlacesFoundException(string message) : base(message) { }
     }

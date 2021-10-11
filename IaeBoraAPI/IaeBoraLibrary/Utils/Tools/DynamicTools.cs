@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Dynamic;
 
-namespace IaeBoraLibrary.Utils
+namespace IaeBoraLibrary.Utils.Tools
 {
     public static class DynamicTools
     {

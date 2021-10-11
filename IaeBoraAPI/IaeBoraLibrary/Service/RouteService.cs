@@ -2,6 +2,7 @@
 using Newtonsoft.Json.Serialization;
 using IaeBoraLibrary.Model.Context;
 using System.Collections.Generic;
+using IaeBoraLibrary.Utils.Tools;
 using IaeBoraLibrary.Model;
 using Newtonsoft.Json;
 using System.Linq;
@@ -87,7 +88,7 @@ namespace IaeBoraLibrary.Service
                 context.SaveChanges();
 
                 openingHours = context.OpeningHours.Include("Place").ToList();
-                var address = Utils.AddressTools.GetLatitudeAndLongitudeFromAddress(route.User.Address);
+                var address = AddressTools.GetLatitudeAndLongitudeFromAddress(route.User.Address);
                 foreach (var category in route.RouteCategories)
                 {
                     var newPoint = TouristPointService.GetTouristPoint(address, category, openingHours, answer);

@@ -1,5 +1,6 @@
 ﻿using IaeBoraLibrary.Model.Enums;
 using System.Collections.Generic;
+using IaeBoraLibrary.Utils.Tools;
 using IaeBoraLibrary.Model;
 using System.Linq;
 using System;
@@ -23,7 +24,7 @@ namespace IaeBoraLibrary.Service
             TouristPoint point = new();
             foreach (var possiblePlace in possiblePlaces)
             {
-                auxDistance = Utils.AddressTools.GetDistanceFromLatitudeAndLongitude(originAddress.Latitude, 
+                auxDistance = AddressTools.GetDistanceFromLatitudeAndLongitude(originAddress.Latitude, 
                                                                                      originAddress.Longitude, 
                                                                                      (double)possiblePlace.Place.Latitude, 
                                                                                      (double)possiblePlace.Place.Longitude);
@@ -43,7 +44,7 @@ namespace IaeBoraLibrary.Service
         public static List<OpeningHours> GetOpeningPlaces(List<OpeningHours> openingHours, DateTime startHour, DateTime endHour)
         {
             var possiblePlaces = openingHours.Where(oh => oh.Open &&
-                Utils.DaysOfWeekTools.TranslateDay(oh.DayOfWeek) == startHour.DayOfWeek &&
+                DaysOfWeekTools.TranslateDay(oh.DayOfWeek) == startHour.DayOfWeek &&
                 oh.StartHour?.Hour <= startHour.Hour && 
                 oh.EndHour?.Hour >= endHour.Hour).ToList();
 

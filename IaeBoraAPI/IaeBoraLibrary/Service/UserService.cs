@@ -1,6 +1,7 @@
 ﻿using IaeBoraLibrary.Utils.Exceptions;
 using Microsoft.EntityFrameworkCore;
 using IaeBoraLibrary.Model.Context;
+using IaeBoraLibrary.Utils.Tools;
 using IaeBoraLibrary.Model;
 using System.Linq;
 
@@ -22,7 +23,7 @@ namespace IaeBoraLibrary.Service
 
         public static void CreateUser(User user)
         {
-            if (Utils.AddressTools.PostalCodeValidator(user.Address))
+            if (AddressTools.PostalCodeValidator(user.Address))
             {
                 using (var context = new Context())
                 {
