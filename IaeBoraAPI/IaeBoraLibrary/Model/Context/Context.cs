@@ -11,6 +11,7 @@ namespace IaeBoraLibrary.Model.Context
         public DbSet<FeedBack> FeedBacks { get; set; }
         public DbSet<Place> Places { get; set; }
         public DbSet<OpeningHours> OpeningHours { get; set; }
+        public DbSet<Log> Logs { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -19,7 +20,6 @@ namespace IaeBoraLibrary.Model.Context
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            //optionsBuilder.UseSqlServer(@"Server=34.95.239.134;Database=iaebora;User Id=sqlserver;Password=Iaebora123456;");
             optionsBuilder.UseSqlServer(@"Server=LocalHost\SQLSERVER;Database=iaeboradevelop;User Id=sa;Password=123456;");
         }
     }

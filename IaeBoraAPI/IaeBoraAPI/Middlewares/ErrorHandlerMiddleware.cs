@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Http;
-using Newtonsoft.Json;
-using System;
-using System.Net;
+﻿using IaeBoraLibrary.Utils.Exceptions;
+using Microsoft.AspNetCore.Http;
 using System.Threading.Tasks;
+using IaeBoraLibrary.Service;
+using Newtonsoft.Json;
+using System.Net;
+using System;
 
 namespace IaeBoraAPI.Middlewares
 {
@@ -29,7 +31,15 @@ namespace IaeBoraAPI.Middlewares
 
         private Task HandleExceptionAsync(HttpContext context, Exception exception)
         {
-            var resultjson = JsonConvert.SerializeObject(new { message = exception.Message });
+            string responseMessage = string.Empty;
+            if (exception is ExceptionBase)
+                responseMessage = exception.Message;
+            else
+            {
+                responseMessage = string.Concat("Erro não mapeado pela API. Erro: " + exception.Message);
+                LogService.Write(exception);
+            }
+            var resultjson = JsonConvert.SerializeObject(new { message = responseMessage });
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
             
