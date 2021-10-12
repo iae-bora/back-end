@@ -10,11 +10,10 @@ namespace IaeBoraLibrary.Model
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         public string Text { get; set; }
+        [Required]
         public double Rating { get; set; }
-
         [NotMapped]
         public int UserRouteId { get; set; }
-
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public Route Route { get; set; }
     }
