@@ -17,7 +17,7 @@ namespace IaeBoraLibrary.Service
                 possiblePlaces = possiblePlaces.Where(p => p.Place.RestaurantCategory == answer.Food).ToList();
 
             if (possiblePlaces.Count == 0)
-                throw new Utils.Exceptions.NotFoundPlacesException("Nenhum local foi encontrado com esse paramêtros.");
+                return null;
 
             List<TouristPoint> historyPlaces = answer.TakeNewPlaces ? RouteService.GetAllRoutes(answer.User.GoogleId).Item1 : null;
             var point = PickTheTouristPoint(originAddress, answer, possiblePlaces, historyPlaces);

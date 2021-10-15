@@ -92,19 +92,21 @@ namespace IaeBoraLibrary.Service
                 foreach (var category in route.RouteCategories)
                 {
                     var newPoint = TouristPointService.GetTouristPoint(address, category, openingHours, answer);
+                    if (newPoint != null)
+                    {
+                        answer.RouteDateAndTime = newPoint.EndHour;
+                        newPoint.Index = count;
+                        newPoint.Route = route;
 
-                    answer.RouteDateAndTime = newPoint.EndHour;
-                    newPoint.Index = count;
-                    newPoint.Route = route;
+                        context.Entry(newPoint.OpeningHours).State = EntityState.Unchanged;
+                        context.TouristPoints.Add(newPoint);
+                        touristPoints.Add(newPoint);
 
-                    context.Entry(newPoint.OpeningHours).State = EntityState.Unchanged;
-                    context.TouristPoints.Add(newPoint);
-                    touristPoints.Add(newPoint);
+                        address.Latitude = (double)newPoint.OpeningHours.Place.Latitude;
+                        address.Longitude = (double)newPoint.OpeningHours.Place.Longitude;
 
-                    address.Latitude = (double)newPoint.OpeningHours.Place.Latitude;
-                    address.Longitude = (double)newPoint.OpeningHours.Place.Longitude;
-
-                    count++;
+                        count++;
+                    }
                 }
                 context.SaveChanges();
             }
