@@ -1,8 +1,6 @@
-﻿using System;
-
-namespace IaeBoraLibrary.Utils.Exceptions
+﻿namespace IaeBoraLibrary.Utils.Exceptions
 {
-    public class AddressServiceException : Exception
+    public class AddressServiceException : ExceptionBase
     {
         public AddressServiceException(string message) : base(message) { }
     }

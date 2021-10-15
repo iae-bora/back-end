@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace IaeBoraLibrary.Utils
+namespace IaeBoraLibrary.Utils.Tools
 {
     public static class DaysOfWeekTools
     {

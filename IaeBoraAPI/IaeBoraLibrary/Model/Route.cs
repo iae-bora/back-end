@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace IaeBoraLibrary.Model
 {
@@ -12,6 +13,7 @@ namespace IaeBoraLibrary.Model
         public int Id { get; set; }
         public DateTime RouteDate { get; set; }
         public User User { get; set; }
+        [JsonIgnore]
         public List<Enums.PlacesEnum> RouteCategories { get; set; }
 
         public Route()
