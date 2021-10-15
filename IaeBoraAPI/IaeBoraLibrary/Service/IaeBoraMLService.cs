@@ -25,6 +25,7 @@ namespace IaeBoraLibrary.Service
             var request = new RestRequest(APIRoutesAndKeys.MachineLearningEndPointRoute, Method.POST);
 
             var placesCategory = GetOpenCategories(answer);
+            answer.PlacesCount = answer.PlacesCount >= placesCategory.Count ? placesCategory.Count : answer.PlacesCount;
             var newAnswer = DynamicTools.ToDynamic(answer);
             newAnswer.places = placesCategory;
 

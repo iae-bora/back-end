@@ -11,7 +11,7 @@ namespace IaeBoraLibrary.Service
     {
         public static TouristPoint GetTouristPoint(Address originAddress, PlacesEnum category, List<OpeningHours> openingHours, Answer answer)
         {
-            List<OpeningHours>  possiblePlaces = GetOpeningPlaces(openingHours, answer.RouteDateAndTime, answer.RouteDateAndTime.AddHours(2)).
+            List<OpeningHours> possiblePlaces = GetOpeningPlaces(openingHours, answer.RouteDateAndTime, answer.RouteDateAndTime.AddHours(2)).
                                                                   Where(p => p.Place.Category == category).ToList();
             if (category == PlacesEnum.Restaurante)
                 possiblePlaces = possiblePlaces.Where(p => p.Place.RestaurantCategory == answer.Food).ToList();
