@@ -5,7 +5,7 @@
 <p align="center">
   <a href="#book-about">About</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
   <a href="#%EF%B8%8F-technologies">Technologies</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-  <a href="#page_facing_up-other-projects">Other projects</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+  <a href="#cityscape-solution-architecture">Solution architecture</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
   <a href="#-running-the-api">Running the API</a>
 </p>
 
@@ -18,6 +18,8 @@
 ## :book: About
 This is the API of IAe, Bora? project and it was developed with .NET 5 and C#.
 
+The IAe, Bora? project is a recommendation system solution for tours and events in Grande ABC (São Paulo, Brazil) region using the concepts of artificial intelligence, machine learning models and recommendation systems, able to recommend places in the region according to the user profile, based on the answers of a questionnaire answered by the users.
+
 ## ⚒️ Technologies
 - [.NET 5](https://docs.microsoft.com/pt-br/dotnet/core/dotnet-five)
 - [C#](https://docs.microsoft.com/pt-br/dotnet/csharp/)
@@ -27,12 +29,17 @@ This is the API of IAe, Bora? project and it was developed with .NET 5 and C#.
 - [ViaCep](https://viacep.com.br/)
 - [Swagger](https://swagger.io/)
 
-## :page_facing_up: Other projects
-You can check the other projects of the IAe, Bora? solution by clicking on the links:
-- [Mobile](https://github.com/iae-bora/mobile)
-- [Front-End](https://github.com/iae-bora/front-end)
-- [Web Crawler](https://github.com/iae-bora/abc-tourism-crawler)
-- [Machine Learning](https://github.com/iae-bora/ml-api)
+## :cityscape: Solution architecture
+This repository is represented by the number 4 in the architecture, if you want to view the other repositories of the solution, click on one of the items below:
+
+<p align="center">
+  <img src="architecture.png"/>
+</p>
+
+- [(1) Web Crawler](https://github.com/iae-bora/abc-tourism-crawler)
+- [(3) Machine Learning](https://github.com/iae-bora/ml-api)
+- [(5) Front-End](https://github.com/iae-bora/front-end)
+- [(6) Mobile](https://github.com/iae-bora/mobile)
 
 ## 🚀 Running the API
 
