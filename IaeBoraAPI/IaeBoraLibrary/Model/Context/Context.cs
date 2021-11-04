@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace IaeBoraLibrary.Model.Context
 {
@@ -23,7 +24,9 @@ namespace IaeBoraLibrary.Model.Context
 #if DEBUG
             optionsBuilder.UseSqlServer(@"Server=LocalHost\SQLSERVER;Database=iaeboradevelop;User Id=sa;Password=123456;");
 #else
-            optionsBuilder.UseSqlServer(@"Server=34.85.205.224;Database=iaebora;User Id=sqlserver;Password=Iae Bora 123456;");
+            var fooUserId = Environment.GetEnvironmentVariable("user");
+            var fooPasswordId = Environment.GetEnvironmentVariable("password");
+            optionsBuilder.UseSqlServer(@$"Server=34.85.205.224;Database=iaebora;User Id={fooUserId};Password={fooPasswordId};");
 #endif
         }
     }
